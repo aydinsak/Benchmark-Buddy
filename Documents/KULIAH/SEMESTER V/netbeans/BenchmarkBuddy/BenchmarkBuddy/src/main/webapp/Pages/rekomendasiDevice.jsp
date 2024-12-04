@@ -1,0 +1,227 @@
+<%-- 
+    Document   : rekomendasiDevice
+    Created on : 4 Dec 2024, 16.04.41
+    Author     : Aydin Shidqi
+--%>
+
+<%@page import="java.util.List"%>
+<%@page import="model.Device"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benchmark Buddy</title>
+    <style>
+        /* General Reset */
+        body, h1, h2, h3, p, ul, li, input {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #ff6a00;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #fff;
+            font-size: 1.8rem;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .search-bar img {
+            width: 25px;
+            cursor: pointer;
+        }
+
+        header nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 1rem;
+        }
+
+        header nav img {
+            width: 30px;
+            border-radius: 50%;
+        }
+
+        .container {
+            display: flex;
+            padding: 30px 20px;
+            gap: 20px;
+        }
+
+        .filter-section {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-section h2 {
+            font-size: 1.5rem;
+            color: #ff6a00;
+            margin-bottom: 15px;
+        }
+
+        .filter-section h3 {
+            margin: 20px 0 10px;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .filter-section input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .recommendation-section {
+            flex: 3;
+        }
+
+        .recommendation-section h2 {
+            color: #ff6a00;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .product-card h3 {
+            font-size: 1.2rem;
+            margin: 15px 0;
+        }
+
+        .product-card p {
+            margin: 5px 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .product-card button {
+            background-color: #ff6a00;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .product-card input[type="checkbox"] {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Benchmark Buddy</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+            <img src="https://via.placeholder.com/20" alt="Search Icon">
+        </div>
+        <nav>
+            <a href="#">HOME</a>
+            <img src="https://via.placeholder.com/30" alt="User Icon">
+        </nav>
+    </header>
+
+    <%
+        // Retrieve the devices list from the session
+        List<Device> devices = (List<Device>) request.getSession().getAttribute("recommendedDevices");
+    %>
+
+    <div class="container">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h2>FILTER</h2>
+            <h3>Kategori</h3>
+            <ul>
+                <li>Gaming Laptop</li>
+                <li>Office Laptop</li>
+                <li>Students Laptop</li>
+                <li>Creators Laptop</li>
+                <li>Home Laptop</li>
+            </ul>
+            <h3>Rentang Harga</h3>
+            <input type="text" placeholder="Harga Minimum">
+            <input type="text" placeholder="Harga Maksimum">
+        </div>
+
+        <!-- Recommendation Section -->
+        <div class="recommendation-section">
+            <h2>Our Recommendation</h2>
+            <% if (devices == null || devices.isEmpty()) { %>
+                <p>No recommended devices are available at the moment.</p>
+            <% } else { %>
+                <div class="products-grid">
+                    <% for (Device device : devices) { %>
+                        <div class="product-card">
+                            <img src="https://via.placeholder.com/150" alt="Product Image">
+                            <h3><%= device.getName() %></h3>
+                            <p>Price: <%= device.getPrice() %></p>
+                            <button>Pelajari Lebih Lanjut</button>
+                            <input type="checkbox"> Bandingkan
+                        </div>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
