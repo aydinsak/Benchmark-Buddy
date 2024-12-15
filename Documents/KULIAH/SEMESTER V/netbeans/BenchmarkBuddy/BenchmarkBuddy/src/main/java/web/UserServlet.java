@@ -32,22 +32,20 @@ public class UserServlet extends HttpServlet {
 
     }
 
-   
-    
-    @Override   
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if ("login".equals(action)){
+        if ("login".equals(action)) {
             Login(request, response);
-        }else if ("InsertPreference".equals(action)){
+        } else if ("InsertPreference".equals(action)) {
             UpdatePreference(request, response);
-        }else if("register".equals(action)){
-            Register(request,response);
+        } else if ("register".equals(action)) {
+            Register(request, response);
         }
     }
-    
-    @Override    
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
@@ -61,17 +59,23 @@ public class UserServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         boolean validateUser = userDAO.validateUser(email, password);
+        boolean validateAdmin=userDAO.validateAdmin(email, password);
 
         if (validateUser){
             User user = userDAO.selectUser(email, password);
             request.getSession().setAttribute("user", user); 
             response.sendRedirect("Pages/homeAfterLogin.jsp");
 
+        }else if(validateAdmin){
+            User user = userDAO.selectUser(email, password);
+            request.getSession().setAttribute("user", user); 
+           response.sendRedirect("Pages/HalamanAdmin.jsp");
+        
         }else{
              response.getWriter().print("Gagal");
         }
     }
-    
+
     protected void Register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String user = request.getParameter("username");
         String email = request.getParameter("email");
@@ -80,17 +84,12 @@ public class UserServlet extends HttpServlet {
         boolean validateUser = userDAO.insertUser(user, email, password);
 
         if (validateUser) {
-            
-           
             response.sendRedirect("Pages/login.jsp");
-
-        }else{
+        } else {
             response.getWriter().print("Gagal");
         }
     }
-    
-    
-    
+
     protected void UpdatePreference(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String processor = request.getParameter("processor");
         String graphics = request.getParameter("graphics");
@@ -118,11 +117,17 @@ public class UserServlet extends HttpServlet {
 
         request.getSession().setAttribute("user", user);
         response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=rekomendasiDevice");
-         
-        
-
     }
+    
+    protected void updateFilter(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String filter = request.getParameter("");
+        User user = (User) request.getSession().getAttribute("user");
 
+       
+
+        request.getSession().setAttribute("user", user);
+        response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=rekomendasiDevice");
+    }
 //
 //    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 //    /**

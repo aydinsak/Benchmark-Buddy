@@ -23,6 +23,8 @@ public class Device {
     private String graphicsCard;
     private String graphicsCardType;
     private String processor;
+    private String url;
+    private String poster_url;
 
     public Device(int deviceId, String name, String brand, String category, int price, String operatingSystem, String battery, String storage, int memory, String display, String graphicsCard, String graphicsCardType, String processor) {
         this.device_id = deviceId;
@@ -38,6 +40,22 @@ public class Device {
         this.graphicsCard = graphicsCard;
         this.graphicsCardType = graphicsCardType;
         this.processor = processor;
+    }
+    
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getPoster_url() {
+        return poster_url;
+    }
+
+    public void setPoster_url(String poster_url) {
+        this.poster_url = poster_url;
     }
 
     public int getDeviceId() {

@@ -68,13 +68,13 @@ public class DeviceDAO {
 
     }
 
-    public List<Device> selectFilterGaming(String category) {
-        String sql = "SELECT * FROM device WHERE category LIKE ?";
+    public List<Device> selectFilter(String category) {
+        String sql = "SELECT * FROM device WHERE category = ?";
         List<Device> devices = new ArrayList<>();
-        
-         try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, "%" + category + "%");
+        try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, category);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -103,6 +103,95 @@ public class DeviceDAO {
         }
 
         return devices;
+    }
+    
+    
+    public Device selectDevice(int device_id) {
+        String sql = "SELECT * FROM device WHERE device_id = ?";
+       
+
+        try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, device_id);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()) {
+              
+
+                String name = rs.getString("name");
+                String brand = rs.getString("brand");
+                String Category = rs.getString("category");
+                int price = rs.getInt("price");
+                String operatingSystem = rs.getString("operatingSystem");
+                String battery = rs.getString("battery");
+                String storage = rs.getString("storage");
+                int memory = rs.getInt("memory");
+                String display = rs.getString("display");
+                String graphicsCard = rs.getString("graphicsCard");
+                String graphicsCardType = rs.getString("graphicsCardType");
+                String Processor = rs.getString("processor");
+                String url = rs.getString("url");
+                String poster_url = rs.getString("poster_url");
+                
+                Device device=new Device(device_id, name, brand, Category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, Processor);  
+                
+            device.setUrl(url);
+            device.setPoster_url(poster_url);
+                
+             return  device;
+                
+
+               
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+    public boolean insertDevice(String name, String brand, String category, int price, String operatingSystem, String battery,
+                                String storage, int memory, String display, String graphicsCard, String graphicsCardType, String processor,
+                                String Url, String poster_url) {
+        // SQL Query (excluding device_id)
+        String sql = "INSERT INTO device (name, brand, category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, processor, url, poster_url) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            // Load MySQL Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Establish database connection and prepare statement
+            try (Connection conn = DriverManager.getConnection(url,user,pasword);
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                // Set values for the query parameters
+                stmt.setString(1, name);
+                stmt.setString(2, brand);
+                stmt.setString(3, category);
+                stmt.setInt(4, price);
+                stmt.setString(5, operatingSystem);
+                stmt.setString(6, battery);
+                stmt.setString(7, storage);
+                stmt.setInt(8, memory);
+                stmt.setString(9, display);
+                stmt.setString(10, graphicsCard);
+                stmt.setString(11, graphicsCardType);
+                stmt.setString(12, processor);
+                stmt.setString(13, Url);
+                stmt.setString(14, poster_url);
+
+                // Execute the query and check for success
+                return stmt.executeUpdate() > 0; // Returns true if at least one row was inserted
+            }
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+
+        return false; // Returns false if the insertion fails
     }
 
 }

@@ -113,10 +113,6 @@
     <body>
         <header>
             <h1>Benchmark Buddy</h1>
-            <div class="search-bar">
-                <input type="text" placeholder="Search...">
-                <img src="https://via.placeholder.com/20" alt="Search Icon">
-            </div>
             <nav>
                 <a href="#">HOME</a>
                 <img src="https://via.placeholder.com/20" alt="User Icon">

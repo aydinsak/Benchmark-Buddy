@@ -37,7 +37,7 @@ public class UserDAO {
     // Method to insert a new user
     public boolean insertUser(String username, String email, String password) {
         String checkQuery = "SELECT username FROM user WHERE username = ?";
-        String insertQuery = "INSERT INTO users (username,email, password) VALUES (?,?,?)";
+        String insertQuery = "INSERT INTO user (username,email, password,isAdmin) VALUES (?,?,?,?)";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -62,6 +62,7 @@ public class UserDAO {
                 insertStatement.setString(1, username);
                 insertStatement.setString(2, email);
                 insertStatement.setString(3, password);
+                insertStatement.setString(4, "0");
                 int rowsInserted = insertStatement.executeUpdate();
                 return rowsInserted > 0; // Returns true if insertion is successful
             }
@@ -73,7 +74,7 @@ public class UserDAO {
     }
 
     public boolean validateUser(String email, String password) {
-        String query = "SELECT email,password FROM user WHERE email = ? AND password = ?";
+        String query = "SELECT email,password FROM user WHERE email = ? AND password = ? and isAdmin=?";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -83,8 +84,8 @@ public class UserDAO {
 
             statement.setString(1, email);
             statement.setString(2, password);
+            statement.setString(3, "0");
             ResultSet resultSet = statement.executeQuery();
-
             // Return true if a matching user is found
             return resultSet.next();
 
@@ -94,8 +95,8 @@ public class UserDAO {
         }
     }
 
-    public boolean validateAdmin(String username, String password) {
-        String query = "SELECT username,password FROM users WHERE username = ? AND password = ? and isAdmin = ?";
+    public boolean validateAdmin(String email, String password) {
+        String query = "SELECT email,password FROM user WHERE email = ? AND password = ? and isAdmin = ?";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -103,7 +104,7 @@ public class UserDAO {
         }
         try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement statement = conn.prepareStatement(query)) {
 
-            statement.setString(1, username);
+             statement.setString(1, email);
             statement.setString(2, password);
             statement.setString(3, "1");
 
