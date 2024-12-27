@@ -118,11 +118,12 @@
         </style>
     </head>
     <body>
-        <header>
+        <%@include file="header.jsp" %>
+<!--        <header>
             <h1>Benchmark Buddy</h1>
             <a href="#">HOME</a>
             <a href="#"><img src="user-icon.png" alt="Profile" height="30"></a>
-        </header>      
+        </header>      -->
         <main>
             <div class="content">
                 <h2>Choose your preference</h2>
@@ -135,10 +136,10 @@
                             <option value="i5">Intel i5</option>
                             <option value="i7">Intel i7</option>
                             <option value="i9">Intel i9</option>
-                            <option value="AMD Ryzen 3">AMD Ryzen 3</option>
-                            <option value="AMD Ryzen 5">AMD Ryzen 5</option>
-                            <option value="AMD Ryzen 7">AMD Ryzen 7</option>
-                            <option value="AMD Ryzen 9">AMD Ryzen 9</option>
+                            <option value="Ryzen 3">AMD Ryzen 3</option>
+                            <option value="Ryzen 5">AMD Ryzen 5</option>
+                            <option value="Ryzen 7">AMD Ryzen 7</option>
+                            <option value="Ryzen 9">AMD Ryzen 9</option>
                         </select>
                     </div>
                     <div class="form-group">

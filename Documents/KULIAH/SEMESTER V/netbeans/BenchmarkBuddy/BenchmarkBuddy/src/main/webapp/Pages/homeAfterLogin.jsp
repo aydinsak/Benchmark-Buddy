@@ -61,7 +61,8 @@
                 margin-left: 15px;
                 font-size: 1rem;
             }
-
+            
+            
             .hero {
                 display: flex;
                 align-items: center;
@@ -107,16 +108,20 @@
                 text-align: center;
                 padding: 10px 20px;
                 font-size: 0.9rem;
+                position: absolute;
+                bottom: 0;
+                width: 100%;
             }
+
         </style>
     </head>
     <body>
         <header>
             <h1>Benchmark Buddy</h1>
-            <nav>
-                <a href="#">HOME</a>
-                <img src="https://via.placeholder.com/20" alt="User Icon">
-            </nav>
+            <!--            <nav>
+                            <a href="#">HOME</a>
+                            <img src="https://via.placeholder.com/20" alt="User Icon">
+                        </nav>-->
         </header>
         <%
             User user = (User) request.getSession().getAttribute("user");
@@ -135,14 +140,18 @@
             <img src="https://via.placeholder.com/150" alt="Laptop Illustration">
             <div class="hero-content">
                 <h2>WELCOME <%= username%></h2>
-                <p>Hello everyone, we are from the BenchmarkBuddy team, and we are excited to present the application we have developed. Our team consists of 6 members, each with their own roles and responsibilities. This application offers laptop recommendations for those who are new to gadgets, especially laptops.</p>
+                <p>Click below to choose your needs or Logout from website</p>
 
-                <form action="${pageContext.request.contextPath}/DeviceServlet" method="get">
-                    <input type="hidden" name="action" value="rekomendasi">
-                    <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href = '${pageContext.request.contextPath}/Pages/Rekomendasi.jsp'">
-                        Start to choose your needs 
+                <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href = '${pageContext.request.contextPath}/Pages/Rekomendasi.jsp'">
+                    Start to choose your needs 
+                </button>
+
+                <form action="${pageContext.request.contextPath}/UserServlet" method="get">
+                    <button type="submit" name="action" value="logout" class="btn btn-primary rounded-lg">
+                        Logout User from <%= username%>
                     </button>
                 </form>
+
 
 
             </div>

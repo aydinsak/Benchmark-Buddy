@@ -76,15 +76,38 @@
             a{
                 text-decoration: none;
             }
+            
+            .btn-back {
+                margin: 10px 0 20px 20px; /* Atur jarak sesuai kebutuhan */
+                background-color: #ff6a00;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                font-size: 1rem;
+                border-radius: 5px;
+                cursor: pointer;
+                text-align: center;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+
+            .btn-back:hover {
+                background-color: #e65a00;
+                transform: scale(1.05);
+            }
+            
+            .rounded-lg {
+                border-radius: 10px;
+            }
         </style>
     </head>
     <%
         Device device = (Device) request.getSession().getAttribute("singleDevice");
-
-
     %>
     <body>
         <%@include file="header.jsp"%>
+        <button type="button" class="btn btn-back rounded-lg" onclick="window.location.href = '${pageContext.request.contextPath}/Pages/rekomendasiDevice.jsp'">
+            Kembali ke List Rekomendasi
+        </button>
         <main>
             <img src="<%= device.getName()%>" alt="Asus Rog Flow X13" class="product-image">
             <div class="product-title"><%= device.getName()%></div>

@@ -25,7 +25,7 @@
             body {
                 min-height: 100vh;
                 width: 100%;
-                background: #04044c;
+                background: #ff6a00;
             }
             .container {
                 position: absolute;
@@ -115,6 +115,11 @@
                         <a href="login.jsp">Login</a>
                     </span>
                 </div>
+                <% if (request.getParameter("error") != null) {%>
+                <div class="error">
+                    <%= request.getParameter("error")%>
+                </div>
+                <% } %>
             </div>
         </div>
     </body>

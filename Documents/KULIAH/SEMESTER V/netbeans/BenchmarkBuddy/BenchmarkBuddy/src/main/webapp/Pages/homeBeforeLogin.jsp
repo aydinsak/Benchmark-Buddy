@@ -122,7 +122,7 @@
     <header>
         <h1>Benchmark Buddy</h1>
         <nav>
-            <a href="homepaage.jsp">HOME</a>
+            <a href="#">HOME</a>
             <a href="Pages/login.jsp">LOGIN</a>
         </nav>
     </header>

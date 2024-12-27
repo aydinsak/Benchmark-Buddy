@@ -24,7 +24,7 @@
             body {
                 min-height: 100vh;
                 width: 100%;
-                background: #04044c;
+                background: #ff6a00;
             }
             .container {
                 position: absolute;
@@ -113,6 +113,15 @@
                         <a href="registration.jsp">Signup</a>
                     </span>
                 </div>
+                <% if (request.getParameter("error") != null) { %>
+                    <div class="error">
+                        <%= request.getParameter("error") %>
+                    </div>
+                <% } if (request.getParameter("message") != null) { %>
+                    <div class="message">
+                        <%= request.getParameter("message") %>
+                    </div>
+                <% } %>
             </div>
         </div>
     </body>

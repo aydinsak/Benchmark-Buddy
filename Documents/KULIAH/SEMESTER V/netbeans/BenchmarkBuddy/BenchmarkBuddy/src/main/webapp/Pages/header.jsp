@@ -43,10 +43,10 @@
     <body>
         <header>
             <h1>Benchmark Buddy</h1>
-            <input type="text" placeholder="Search...">
-            <a href="#">HOME</a>
+            <!--<input type="text" placeholder="Search...">-->
+            <a href="${pageContext.request.contextPath}/Pages/homeAfterLogin.jsp">HOME</a>
             <!--<a href="#"><img src="user-icon.png" alt="Profile" height="30"></a>-->
-            <a href="#">👤 Profile</a>
+            <!--<a href="#">👤 Profile</a>-->
         </header>    
     </body>
 

@@ -167,6 +167,55 @@
             .product-card input[type="checkbox"] {
                 margin-top: 10px;
             }
+
+            .btn-primary {
+                background-color: #ff6a00;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                font-size: 1rem;
+                border-radius: 5px;
+                cursor: pointer;
+                text-align: center;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+
+            .btn-primary:hover {
+                background-color: #e65a00;
+                transform: scale(1.05);
+            }
+            .btn-back {
+                margin: 10px 0 20px 20px; /* Atur jarak sesuai kebutuhan */
+                background-color: #ff6a00;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                font-size: 1rem;
+                border-radius: 5px;
+                cursor: pointer;
+                text-align: center;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+
+            .btn-back:hover {
+                background-color: #e65a00;
+                transform: scale(1.05);
+            }
+
+                .rounded-lg {
+                    border-radius: 10px;
+                }
+
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            ul li {
+                margin-bottom: 10px;
+            }
+
         </style>
     </head>
     <body>
@@ -182,7 +231,9 @@
                         <img src="https://via.placeholder.com/30" alt="User Icon">
                     </nav>
                 </header>-->
-
+        <button type="button" class="btn btn-back rounded-lg" onclick="window.location.href = '${pageContext.request.contextPath}/Pages/Rekomendasi.jsp'">
+            Kembali ke pilihan Preference
+        </button>
         <%
             // Retrieve the devices list from the session
             List<Device> devices = (List<Device>) request.getSession().getAttribute("recommendedDevices");
@@ -230,9 +281,9 @@
                         </button>
                     </li>
                 </ul>
-                <h3>Rentang Harga</h3>
-                <input type="text" placeholder="Harga Minimum">
-                <input type="text" placeholder="Harga Maksimum">
+                <!--                <h3>Rentang Harga</h3>
+                                <input type="text" placeholder="Harga Minimum">
+                                <input type="text" placeholder="Harga Maksimum">-->
             </div>
 
             <!-- Recommendation Section -->

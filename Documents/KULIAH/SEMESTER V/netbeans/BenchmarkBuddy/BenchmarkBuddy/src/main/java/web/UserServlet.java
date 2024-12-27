@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,6 +52,8 @@ public class UserServlet extends HttpServlet {
 
         if ("login".equals(action)) {
             Login(request, response);
+        } else if ("logout".equals(action)) {
+            Logout(request,response);
         }
     }
 
@@ -59,21 +62,32 @@ public class UserServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         boolean validateUser = userDAO.validateUser(email, password);
-        boolean validateAdmin=userDAO.validateAdmin(email, password);
+        boolean validateAdmin = userDAO.validateAdmin(email, password);
 
-        if (validateUser){
+        if (validateUser) {
             User user = userDAO.selectUser(email, password);
-            request.getSession().setAttribute("user", user); 
+            request.getSession().setAttribute("user", user);
             response.sendRedirect("Pages/homeAfterLogin.jsp");
 
-        }else if(validateAdmin){
+        } else if (validateAdmin) {
             User user = userDAO.selectUser(email, password);
-            request.getSession().setAttribute("user", user); 
-           response.sendRedirect("Pages/HalamanAdmin.jsp");
-        
-        }else{
-             response.getWriter().print("Gagal");
+            request.getSession().setAttribute("user", user);
+            response.sendRedirect("Pages/HalamanAdmin.jsp");
+
+        } else {
+//            response.getWriter().print("Gagal");
+            response.sendRedirect("Pages/login.jsp?error=username+atau+password+salah");
         }
+    }
+
+    protected void Logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        // Redirect ke halaman login
+        response.sendRedirect("http://localhost:8080/BenchmarkBuddy");
     }
 
     protected void Register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -86,7 +100,8 @@ public class UserServlet extends HttpServlet {
         if (validateUser) {
             response.sendRedirect("Pages/login.jsp");
         } else {
-            response.getWriter().print("Gagal");
+            response.sendRedirect("Pages/login.jsp?error=username+sudah+ada");
+//            response.getWriter().print("Gagal");
         }
     }
 
@@ -118,12 +133,10 @@ public class UserServlet extends HttpServlet {
         request.getSession().setAttribute("user", user);
         response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=rekomendasiDevice");
     }
-    
+
     protected void updateFilter(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String filter = request.getParameter("");
         User user = (User) request.getSession().getAttribute("user");
-
-       
 
         request.getSession().setAttribute("user", user);
         response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=rekomendasiDevice");
