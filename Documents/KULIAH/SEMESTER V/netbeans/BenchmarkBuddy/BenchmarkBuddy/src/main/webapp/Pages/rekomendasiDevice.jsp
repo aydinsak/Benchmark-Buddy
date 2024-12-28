@@ -295,12 +295,18 @@
                 <div class="products-grid">
                     <% for (Device device : displayDevices) {%>
                     <div class="product-card">
-                        <!--<img src="<%= device.getPoster_url()%>" alt="Laptop Image">-->
-                        <img src="../PagesAssets/device-icon.png" alt="Laptop Image">
+                        <%
+                            String posterUrl = device.getPoster_url();
+                            String finalUrl = posterUrl.contains("images_device")
+                                    ? ((HttpServletRequest) request).getContextPath() + "/" + posterUrl
+                                    : posterUrl;
+                        %>
+                        <img src="<%= finalUrl%>" alt="laptop-img" class="product-image">
+                        <!--<img src="../PagesAssets/device-icon.png" alt="Laptop Image">-->
                         <h3><%= device.getName()%></h3>
                         <p>Price: <%= device.getPrice()%></p>
                         <button type="button" onclick="window.location.href = '${pageContext.request.contextPath}/DeviceServlet?action=showDevices&idDevices=<%=device.getDeviceId()%>'">Pelajari Lebih Lanjut</button> <br>
-<!--                        <input type="checkbox"> Bandingkan-->
+                        <!--                        <input type="checkbox"> Bandingkan-->
                     </div>
                     <% } %>
                 </div>

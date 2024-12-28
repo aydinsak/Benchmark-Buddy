@@ -109,57 +109,64 @@
         <button type="button" class="btn btn-back rounded-lg" onclick="window.location.href = '${pageContext.request.contextPath}/Pages/rekomendasiDevice.jsp'">
             Kembali ke List Rekomendasi
         </button>
-        <main>
-            <!--            <a href="https://ibb.co.com/2Zf7Mdv" class="product-link">
-                            <img src="<%= device.getPoster_url()%>" alt="Laptop" border="0" class="product-image" />
-                        </a>-->
 
-            <img src="<%= device.getPoster_url()%>" alt="laptop-img" class="product-image">
-            <div class="product-title"><%= device.getName()%></div>
-            <div class="product-price"<%= device.getName()%></div>
-            <div class="price">Harga: Rp.<%= device.getPrice()%></div>
-            <div class="category">Kategori: <%= device.getCategory()%> Laptop</div>
-            <%
+        <!--            <a href="https://ibb.co.com/2Zf7Mdv" class="product-link">
+                        <img src="<%= device.getPoster_url()%>" alt="Laptop" border="0" class="product-image" />
+                    </a>-->
+
+        <%
+            String posterUrl = device.getPoster_url();
+            String finalUrl = posterUrl.contains("images_device")
+                    ? ((HttpServletRequest) request).getContextPath() + "/" + posterUrl
+                    : posterUrl;
+        %>
+        <img src="<%= finalUrl%>" alt="laptop-img" class="product-image">
+        <div class="product-title"><%= device.getName()%></div>
+        <div class="product-price"><%= device.getName()%></div>
+        <div class="price">Harga: Rp.<%= device.getPrice()%></div>
+        <div class="category">Kategori: <%= device.getCategory()%> Laptop</div>
+
+        <%
                 if (!device.getUrl().isEmpty()) {%>
-            <div class="shop-button"><a href="<%= device.getUrl()%>" target="_blank">Official Website</a> </div>
-            <%
-                }
-            %>
-            <table>
-                <tr>
-                    <th>Spesifikasi</th>
-                    <th>Detail</th>
-                </tr>
-                <tr>
-                    <td>Sistem Operasi</td>
-                    <td><%= device.getOperatingSystem()%></td>
-                </tr>
-                <tr>
-                    <td>Prosesor</td>
-                    <td><%= device.getProcessor()%></td>
-                </tr>
-                <tr>
-                    <td>Kartu Grafis</td>
-                    <td><%= device.getGraphicsCard()%></td>
-                </tr>
-                <tr>
-                    <td>Jenis Kartu Grafis</td>
-                    <td><%= device.getGraphicsCardType()%></td>
-                </tr>
-                <tr>
-                    <td>Penyimpanan</td>
-                    <td><%= device.getStorage()%></td>
-                </tr>
-                <tr>
-                    <td>Display</td>
-                    <td><%= device.getDisplay()%></td>
-                </tr>
-                <tr>
-                    <td>Baterai</td>
-                    <td><%= device.getBattery()%></td>
-                </tr>
-            </table>
-        </main>
+        <div class="shop-button"><a href="<%= device.getUrl()%>" target="_blank">Official Website</a> </div>
+        <%
+            }
+        %>
+        <table>
+            <tr>
+                <th>Spesifikasi</th>
+                <th>Detail</th>
+            </tr>
+            <tr>
+                <td>Sistem Operasi</td>
+                <td><%= device.getOperatingSystem()%></td>
+            </tr>
+            <tr>
+                <td>Prosesor</td>
+                <td><%= device.getProcessor()%></td>
+            </tr>
+            <tr>
+                <td>Kartu Grafis</td>
+                <td><%= device.getGraphicsCard()%></td>
+            </tr>
+            <tr>
+                <td>Jenis Kartu Grafis</td>
+                <td><%= device.getGraphicsCardType()%></td>
+            </tr>
+            <tr>
+                <td>Penyimpanan</td>
+                <td><%= device.getStorage()%></td>
+            </tr>
+            <tr>
+                <td>Display</td>
+                <td><%= device.getDisplay()%></td>
+            </tr>
+            <tr>
+                <td>Baterai</td>
+                <td><%= device.getBattery()%></td>
+            </tr>
+        </table>
+
     </body>
 </html>
 

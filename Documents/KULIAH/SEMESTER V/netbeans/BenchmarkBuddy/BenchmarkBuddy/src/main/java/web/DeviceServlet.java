@@ -26,8 +26,9 @@ import model.User;
  * @author Aydin Shidqi
  */
 @WebServlet(name = "DeviceServlet", urlPatterns = {"/DeviceServlet"})
-@MultipartConfig 
+@MultipartConfig
 public class DeviceServlet extends HttpServlet {
+
     private final String uploadDirectory = "C:/images_device";
 
     private UserDAO userDAO;
@@ -53,19 +54,22 @@ public class DeviceServlet extends HttpServlet {
         if ("rekomendasiDevice".equals(action)) {
             getRekomendasiDevice(request, response);
         } else if ("filterByCategory".equals(action)) {
-             getDeviceByCategory(request,response);
-        }else if("showDevices".equals(action)){
-            ShowDevices(request,response);
+            getDeviceByCategory(request, response);
+        } else if ("showDevices".equals(action)) {
+            ShowDevices(request, response);
+        } else if ("showAllDevicesAdmin".equals(action)){
+            showAllDevices(request, response);
+            response.sendRedirect("Pages/HalamanAdmin.jsp");
         }
     }
-    
-     @Override
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
         if ("tambahDevice".equals(action)) {
-           tambahDevice(request,response);
-        } 
+            tambahDevice(request, response);
+        }
     }
 
     protected void getRekomendasiDevice(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -88,45 +92,51 @@ public class DeviceServlet extends HttpServlet {
         );
 
         // Set recommended devices to request and forward to JSP (or return as JSON)
-         request.getSession().setAttribute("filteredDevice", null);
+        request.getSession().setAttribute("filteredDevice", null);
         request.getSession().setAttribute("recommendedDevices", devices);
-        response.sendRedirect(request.getContextPath() +"/Pages/rekomendasiDevice.jsp");
+        response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp");
 
     }
-    
+
     protected void getDeviceByCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       String category=request.getParameter("category");
-       
-       List<Device>FilteredDevices=deviceDAO.selectFilter(category);
-       if(FilteredDevices==null || FilteredDevices.isEmpty()){
-           request.getSession().setAttribute("filteredDevice",null);
-       }else{
+        String category = request.getParameter("category");
+
+        List<Device> FilteredDevices = deviceDAO.selectFilter(category);
+        if (FilteredDevices == null || FilteredDevices.isEmpty()) {
+            request.getSession().setAttribute("filteredDevice", null);
+        } else {
             request.getSession().setAttribute("filteredDevice", FilteredDevices);
-       }
-      
-       request.getSession().setAttribute("recommendedDevices", null);
-       response.sendRedirect(request.getContextPath() +"/Pages/rekomendasiDevice.jsp");
-       
+        }
+
+        request.getSession().setAttribute("recommendedDevices", null);
+        response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp");
+
     }
-    
-     protected void ShowDevices(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       int device_id=Integer.parseInt(request.getParameter("idDevices"));
-       
-       Device singleDevice=deviceDAO.selectDevice(device_id);
-       if(singleDevice==null){
-           request.getSession().setAttribute("singleDevice",null);
-       }else{
+
+    protected void ShowDevices(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int device_id = Integer.parseInt(request.getParameter("idDevices"));
+
+        Device singleDevice = deviceDAO.selectDevice(device_id);
+        if (singleDevice == null) {
+            request.getSession().setAttribute("singleDevice", null);
+        } else {
             request.getSession().setAttribute("singleDevice", singleDevice);
-       }
-       
-       
-        response.sendRedirect(request.getContextPath() +"/Pages/showDevice.jsp");
-       
-      
-       
+        }
+
+        response.sendRedirect(request.getContextPath() + "/Pages/showDevice.jsp");
     }
-     
-     protected void tambahDevice(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    protected void showAllDevices(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Device> devices = deviceDAO.showAllDevices();
+
+        if (devices == null || devices.isEmpty()) {
+            request.getSession().setAttribute("allDevices", null);
+        } else {
+            request.getSession().setAttribute("allDevices", devices);
+        }
+    }
+
+    protected void tambahDevice(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Extract parameters from the request
         String name = request.getParameter("name");
         String brand = request.getParameter("brand");
@@ -146,7 +156,7 @@ public class DeviceServlet extends HttpServlet {
         String fileName = filePart.getSubmittedFileName();
         String filePath = uploadDirectory + File.separator + fileName;
 
-        // Save the file to the server
+        // Save the file to the server4
         File fileSaveDir = new File(uploadDirectory);
         if (!fileSaveDir.exists()) {
             fileSaveDir.mkdirs(); // Create the directory if it does not exist
@@ -164,9 +174,11 @@ public class DeviceServlet extends HttpServlet {
 
         // Handle the result of the operation
         if (deviceAdded) {
-            response.getWriter().println("Berhasil"); // Redirect to the device list page
+//            response.getWriter().println("Berhasil");
+            response.sendRedirect("Pages/HalamanAdmin.jsp?msg=Device+berhasil+ditambahkan");
         } else {
-            response.getWriter().println("Failed to add the device. Please try again.");
+//            response.getWriter().println("Failed to add the device. Please try again.");
+            response.sendRedirect("Pages/HalamanAdmin.jsp?error=Device+gagal+ditambahkan");
         }
     }
 

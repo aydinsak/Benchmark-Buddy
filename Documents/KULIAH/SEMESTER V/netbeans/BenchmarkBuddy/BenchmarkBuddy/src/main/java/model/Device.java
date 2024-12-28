@@ -26,7 +26,7 @@ public class Device {
     private String url;
     private String poster_url;
 
-    public Device(int deviceId, String name, String brand, String category, int price, String operatingSystem, String battery, String storage, int memory, String display, String graphicsCard, String graphicsCardType, String processor) {
+    public Device(int deviceId, String name, String brand, String category, int price, String operatingSystem, String battery, String storage, int memory, String display, String graphicsCard, String graphicsCardType, String processor,String poster_url) {
         this.device_id = deviceId;
         this.name = name;
         this.brand = brand;
@@ -40,6 +40,8 @@ public class Device {
         this.graphicsCard = graphicsCard;
         this.graphicsCardType = graphicsCardType;
         this.processor = processor;
+        this.poster_url=poster_url;
+        
     }
     
     public String getUrl() {

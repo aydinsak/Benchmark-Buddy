@@ -27,6 +27,38 @@ public class DeviceDAO {
     public DeviceDAO() {
     }
 
+    public List<Device> showAllDevices() {
+        List<Device> devices = new ArrayList<>();
+        String sql = "SELECT * FROM device";
+
+        try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int device_id = rs.getInt("device_id");
+                String name = rs.getString("name");
+                String brand = rs.getString("brand");
+                String category = rs.getString("category");
+                int price = rs.getInt("price");
+                String operatingSystem = rs.getString("operatingSystem");
+                String battery = rs.getString("battery");
+                String storage = rs.getString("storage");
+                int memory = rs.getInt("memory");
+                String display = rs.getString("display");
+                String graphicsCard = rs.getString("graphicsCard");
+                String graphicsCardType = rs.getString("graphicsCardType");
+                String processor = rs.getString("processor");
+                String url = rs.getString("url");
+                String poster_url = rs.getString("poster_url");
+
+                devices.add(new Device(device_id, name, brand, category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, processor, poster_url));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return devices;
+    }
+
     public List<Device> getRecommendedDevice(String processor, String GpuType, int RAM) {
 
         List<Device> devices = new ArrayList<>();
@@ -57,7 +89,7 @@ public class DeviceDAO {
                 String url = rs.getString("url");
                 String poster_url = rs.getString("poster_url");
 
-                devices.add(new Device(device_id, name, brand, category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, Processor));
+                devices.add(new Device(device_id, name, brand, category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, Processor, poster_url));
 
             }
         } catch (SQLException e) {
@@ -95,7 +127,7 @@ public class DeviceDAO {
                 String url = rs.getString("url");
                 String poster_url = rs.getString("poster_url");
 
-                devices.add(new Device(device_id, name, brand, Category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, Processor));
+                devices.add(new Device(device_id, name, brand, Category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, Processor, poster_url));
 
             }
         } catch (SQLException e) {
@@ -130,7 +162,7 @@ public class DeviceDAO {
                 String url = rs.getString("url");
                 String poster_url = rs.getString("poster_url");
 
-                Device device = new Device(device_id, name, brand, Category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, Processor);
+                Device device = new Device(device_id, name, brand, Category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, Processor, poster_url);
 
                 device.setUrl(url);
                 device.setPoster_url(poster_url);

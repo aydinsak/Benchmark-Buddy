@@ -72,7 +72,8 @@ public class UserServlet extends HttpServlet {
         } else if (validateAdmin) {
             User user = userDAO.selectUser(email, password);
             request.getSession().setAttribute("user", user);
-            response.sendRedirect("Pages/HalamanAdmin.jsp");
+            
+             response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=showAllDevicesAdmin");
 
         } else {
 //            response.getWriter().print("Gagal");

@@ -142,7 +142,7 @@
         <section class="hero">
             <h2>WELCOME BUDDY :)</h2>
             <p>Hello everyone, we are from the BenchmarkBuddy team, and we are excited to present the application we have developed. Our team consists of 6 members, each with their own roles and responsibilities. This application offers laptop recommendations for those who are new to gadgets, especially laptops.</p>
-            <img src="PagesAssets/laptop.png" alt="Laptop illustration">
+            <img src="${pageContext.request.contextPath}/PagesAssets/laptop.png" alt="Laptop illustration">
             <br>
 
             <button type="button" class="btn btn-primary rounded-lg" onclick="window.location.href = 'Pages/login.jsp'">
@@ -153,7 +153,7 @@
         <section class="service">
             <h2>Our Service</h2>
             <p>We provide service for people who are still new to gadgets, especially laptops</p>
-            <img src="PagesAssets/service.png" width="" alt="Service illustration">
+            <img src="${pageContext.request.contextPath}/PagesAssets/service.png" width="" alt="Service illustration">
             <p><strong>LAPTOP RECOMMENDATION:</strong> We offer advice and the best laptop option for your needs.</p>
         </section>
 

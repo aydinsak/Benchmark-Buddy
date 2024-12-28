@@ -136,7 +136,7 @@
 
 
         <section class="hero">
-            <img src="../PagesAssets/user-icon.png" alt="Laptop Illustration">
+            <img src="${pageContext.request.contextPath}/PagesAssets/user-icon.png" alt="Laptop Illustration">
             <div class="hero-content">
                 <h2>WELCOME <%= username%></h2>
                 <p>Click below to choose your needs or Logout from website</p>

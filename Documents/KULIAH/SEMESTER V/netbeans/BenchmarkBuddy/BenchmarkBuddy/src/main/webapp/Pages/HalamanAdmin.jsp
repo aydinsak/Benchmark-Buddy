@@ -14,7 +14,7 @@
                 font-family: Arial, sans-serif;
                 background-color: #ffffff;
             }
-            
+
             header {
                 display: flex;
                 justify-content: space-between;
@@ -22,26 +22,26 @@
                 padding: 10px 20px;
                 background-color: #ffffff;
                 color: #ff6600;
-                
+
             }
-            
+
             .logo{
                 font-size: 20px;
                 font-weight: bold;
             }
-            
+
             .header-actions {
                 display: flex;
                 align-items: center;
             }
-              
+
             .search-bar {
                 padding: 5px 10px;
                 border: 1px solid #ddd;
                 border-radius: 5px;
                 margin-right: 10px;
             }
-            
+
             .search-btn {
                 background-color: #ffffff;
                 border: 1px solid #ddd;
@@ -49,19 +49,19 @@
                 cursor: pointer;
                 border-radius: 5px;
             }
-            
+
             .profile-icon {
                 font-size: 24px;
                 margin-left: 10px;
             }
-            
+
             .container {
                 padding: 20px;
                 background-color: white;
                 display: flex;
-                
+
             }
-            
+
             #add-device-btn {
                 background-color: #ff6600;
                 color: white;
@@ -71,7 +71,7 @@
                 cursor: pointer;
                 border-radius: 30px;
             }
-            
+
             .device-list {
                 padding: 90px;
                 background-color: #e6f0ff;
@@ -79,7 +79,7 @@
                 text-align: center;
                 margin: 90px;
             }
-            
+
             .modal {
                 display: none;
                 position: fixed;
@@ -172,14 +172,14 @@
             .submit-button:hover {
                 background-color: #e74c3c;
             }
-            
+
             .content {
                 flex-grow: 3;
                 margin-left: 10px;
                 margin-right: 40px;
                 background-color: white;
             }
-            
+
             .filter {
                 flex-grow: 1;
                 background-color: pink;
@@ -191,42 +191,42 @@
             }
 
             .filter-header {
-              background-color: #ff6600;
-              color: white;
-              font-weight: bold;
-              text-align: center;
-              padding: 10px 0;
+                background-color: #ff6600;
+                color: white;
+                font-weight: bold;
+                text-align: center;
+                padding: 10px 0;
             }
 
             .filter-category {
-              padding: 10px;
+                padding: 10px;
             }
 
             .filter-category h3 {
-              margin: 0;
-              font-size: 16px;
-              color: #333;
-              border-bottom: 1px solid #ddd;
-              padding-bottom: 5px;
+                margin: 0;
+                font-size: 16px;
+                color: #333;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 5px;
             }
 
             .filter-category ul {
-              list-style-type: none;
-              padding: 0;
-              margin: 10px 0 0;
+                list-style-type: none;
+                padding: 0;
+                margin: 10px 0 0;
             }
 
             .filter-category li {
-              padding: 10px 5px;
-              cursor: pointer;
-              color: #555;
+                padding: 10px 5px;
+                cursor: pointer;
+                color: #555;
             }
 
             .filter-category li:hover {
-              background-color: #f9f9f9;
-              color: #000;
+                background-color: #f9f9f9;
+                color: #000;
             }
-            
+
             .deviceList {
                 flex: 3;
                 margin-top: 10px;
@@ -285,120 +285,162 @@
             .product-card input[type="checkbox"] {
                 margin-top: 10px;
             }
-            
+            .error-msg {
+                text-align: center;
+                color: #d8000c;
+                background-color: #ffbaba;
+                border: 1px solid #d8000c;
+                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 10px;
+                font-size: 16px;
+            }
+
+            .msg {
+                text-align: center;
+                color: #4f8a10;
+                background-color: #dff2bf;
+                border: 1px solid #4f8a10;
+                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 10px;
+                font-size: 16px;
+            }
         </style>
-        
+
     </head> 
     <body>
         <header>
-        <div class="logo">Benchmark Buddy</div>
-        <div class="header-actions">
-            <input type="text" class="search-bar" placeholder="Search...">
-            <button class="search-btn">🔍</button>
-            <div class="profile-icon">👤</div>
-        </div>
+            <div class="logo">Benchmark Buddy</div>
+            <div class="header-actions">
+                <div class="profile-icon">👤</div>
+                <form action="${pageContext.request.contextPath}/UserServlet" method="get">
+                    <button type="submit" name="action" value="logout" class="btn btn-primary rounded-lg">
+                        Logout
+                    </button>
+                </form>
+            </div>
         </header>
-        
+        <% if (request.getParameter("msg") != null) {%>
+        <div class="msg">
+            <%= request.getParameter("msg")%>
+        </div>
+        <% } %>
+        <% if (request.getParameter("error") != null) {%>
+        <div class="error-msg">
+            <%= request.getParameter("error")%>
+        </div>
+        <% } %>
         <%
-        // Retrieve the devices list from the session
-        List<Device> devices = (List<Device>) request.getSession().getAttribute("recommendedDevices");
+            // Retrieve the devices list from the session
+            List<Device> devices = (List<Device>) request.getSession().getAttribute("allDevices");
         %>
-        
-         <div style="height: 35px; background-color: #ff6600; margin: 20px;"></div>
-        
-       <div class="container">   
-           <div class="filter">
-               <div class="filter-header">FILTER</div>
-                <div class="filter-category">
-                  <h3>Kategori</h3>
-                  <ul>
-                    <li>Gaming Laptop</li>
-                    <li>Office Laptop</li>
-                    <li>Students Laptop</li>
-                    <li>Creators Laptop</li>
-                    <li>Home Laptop</li>
-                  </ul>
-                </div>
-           </div>
+
+        <div style="height: 35px; background-color: #ff6600; margin: 20px;"></div>
+
+        <div class="container">   
+            <!--            <div class="filter">
+                            <div class="filter-header">FILTER</div>
+                            <div class="filter-category">
+                                <h3>Kategori</h3>
+                                <ul>
+                                    <li>Gaming Laptop</li>
+                                    <li>Office Laptop</li>
+                                    <li>Students Laptop</li>
+                                    <li>Creators Laptop</li>
+                                    <li>Home Laptop</li>
+                                </ul>
+                            </div>
+                        </div>-->
             <div class="content">
                 <button id="add-device-btn">+ Tambah Device</button>
                 <div class="deviceList">
                     <% if (devices == null || devices.isEmpty()) { %>
-                        <div class="device-list" id="device-list">
-                            <p>Belum ada Device</p>
-                        </div>
+                    <div class="device-list" id="device-list">
+                        <p>Belum ada Device</p>
+                    </div>
                     <% } else { %>
-                        <div class="products-grid">
-                            <% for (Device device : devices) { %>
-                                <div class="product-card">
-                                    <img src="https://via.placeholder.com/150" alt="Product Image">
-                                    <h3><%= device.getName() %></h3>
-                                    <p>Price: <%= device.getPrice() %></p>
-                                    <button>Edit Device</button>
-                                    <button>Hapus Device</button>
-                                </div>
-                            <% } %>
+                    <div class="products-grid">
+                        <% for (Device device : devices) {%>
+                        <div class="product-card">
+                            <%
+                                String posterUrl = device.getPoster_url();
+                                String finalUrl = posterUrl.contains("images_device")
+                                        ? ((HttpServletRequest) request).getContextPath() + "/" + posterUrl
+                                        : posterUrl;
+                            %>
+                            <img src="<%= finalUrl%>" alt="laptop-img" class="product-image">
+                            <!--<img src="https://via.placeholder.com/150" alt="Product Image">-->
+                            <h3><%= device.getName()%></h3>
+                            <p>Price: <%= device.getPrice()%></p>
+                            <button>Edit Device</button>
+                            <button>Hapus Device</button>
                         </div>
-                    <% } %>
+                        <% } %>
+                    </div>
+                    <% }%>
                 </div>
-                
+
                 <div class="modal" id="deviceModal">
-        <div class="modal-content">
-            <span class="close-btn" id="closeModalBtn">&times;</span>
-            <h2>Tambah Device</h2>
-            <form id="deviceForm" action="${pageContext.request.contextPath}/DeviceServlet" method="post" enctype="multipart/form-data"> 
-                <input type="hidden" name="action" value="tambahDevice">
-                <label for="deviceName">Nama Device</label>
-                <input type="text" id="deviceName" name="name" placeholder="Example: Acer Nitro 5">
+                    <div class="modal-content">
+                        <span class="close-btn" id="closeModalBtn">&times;</span>
+                        <h2>Tambah Device</h2>
+                        <form id="deviceForm" action="${pageContext.request.contextPath}/DeviceServlet" method="post" enctype="multipart/form-data"> 
+                            <input type="hidden" name="action" value="tambahDevice">
+                            <label for="deviceName">Nama Device</label>
+                            <input type="text" id="deviceName" name="name" placeholder="Example: Acer Nitro 5">
 
-                <label for="deviceBrand">Brand Device</label>
-                <input type="text" id="deviceBrand" name="brand" placeholder="Example: Asus">
+                            <label for="deviceBrand">Brand Device</label>
+                            <input type="text" id="deviceBrand" name="brand" placeholder="Example: Asus">
 
-                <label for="devicePrice">Harga Device</label>
-                <input type="text" id="devicePrice" name="price" placeholder="Example: Rp14.000.000,00">
+                            <label for="deviceBrand">url </label>
+                            <input type="text" id="deviceUrl" name="url" placeholder="Example: http://www.example.com">
 
-                <label for="deviceCategory">Kategori</label>
-                <input type="text" id="deviceCategory" name="category" placeholder="Example: Laptop Gaming">
+                            <label for="devicePrice">Harga Device</label>
+                            <input type="text" id="devicePrice" name="price" placeholder="Example: Rp14.000.000,00">
 
-                <label for="deviceOS">Sistem Operasi</label>
-                <input type="text" id="deviceOS" name="operatingSystem" placeholder="Example: Windows 11">
+                            <label for="deviceCategory">Kategori</label>
+                            <input type="text" id="deviceCategory" name="category" placeholder="Example: Laptop Gaming">
 
-                <label for="deviceProcessor">Prosesor</label>
-                <input type="text" id="deviceProcessor" name="processor" placeholder="Example: Intel Core i7">
+                            <label for="deviceOS">Sistem Operasi</label>
+                            <input type="text" id="deviceOS" name="operatingSystem" placeholder="Example: Windows 11">
 
-                <label for="deviceGraphics">Kartu Grafis</label>
-                <input type="text" id="deviceGraphics" name="graphicsCard" placeholder="Example: NVIDIA GTX 1650">
+                            <label for="deviceProcessor">Prosesor</label>
+                            <input type="text" id="deviceProcessor" name="processor" placeholder="Example: Intel Core i7">
 
-                <label for="graphicsCardType">Tipe Kartu Grafis</label>
-                <select id="graphicsCardType" name="graphicsCardType">
-                    <option value="Dedicated">Dedicated</option>
-                    <option value="Integrated">Integrated</option>
-                </select>
+                            <label for="deviceGraphics">Kartu Grafis</label>
+                            <input type="text" id="deviceGraphics" name="graphicsCard" placeholder="Example: NVIDIA GTX 1650">
 
-                <label for="deviceDisplay">Layar</label>
-                <input type="text" id="deviceDisplay" name="display" placeholder="Example: 15.6-inch, FHD">
+                            <label for="graphicsCardType">Tipe Kartu Grafis</label>
+                            <select id="graphicsCardType" name="graphicsCardType">
+                                <option value="Dedicated">Dedicated</option>
+                                <option value="Integrated">Integrated</option>
+                            </select>
 
-                <label for="deviceMemory">Memori</label>
-                <input type="number" id="deviceMemory" name="memory" placeholder="Example: 16GB">
+                            <label for="deviceDisplay">Layar</label>
+                            <input type="text" id="deviceDisplay" name="display" placeholder="Example: 15.6-inch, FHD">
 
-                <label for="deviceStorage">Penyimpanan</label>
-                <input type="text" id="deviceStorage" name="storage" placeholder="Example: 512GB SSD">
+                            <label for="deviceMemory">Memori</label>
+                            <input type="number" id="deviceMemory" name="memory" placeholder="Example: 16GB">
 
-                <label for="deviceBattery">Baterai</label>
-                <input type="text" id="deviceBattery" name="battery" placeholder="Example: 6 hours">
+                            <label for="deviceStorage">Penyimpanan</label>
+                            <input type="text" id="deviceStorage" name="storage" placeholder="Example: 512GB SSD">
 
-                <label for="deviceImage">Gambar</label>
-                <input type="file" id="deviceImage" name="image" accept="image/*">
+                            <label for="deviceBattery">Baterai</label>
+                            <input type="text" id="deviceBattery" name="battery" placeholder="Example: 6 hours">
 
-                <button type="submit">Simpan Device</button>
-            </form>
-        </div>
-    </div>
+                            <label for="deviceImage">Gambar</label>
+                            <input type="file" id="deviceImage" name="image" accept="image/*">
+
+                            <button type="submit">Simpan Device</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-         
-        
-        
+
+
+
         <script>
             const addDeviceBtn = document.getElementById('add-device-btn');
             const deviceModal = document.getElementById('deviceModal');
@@ -419,19 +461,19 @@
                     deviceModal.style.display = 'none';
                 }
             });
-            
-            document.addEventListener('DOMContentLoaded', () => {
-            const categories = document.querySelectorAll('.filter-category li');
 
-            categories.forEach(category => {
-              category.addEventListener('click', () => {
+            document.addEventListener('DOMContentLoaded', () => {
+                const categories = document.querySelectorAll('.filter-category li');
+
+                categories.forEach(category => {
+                    category.addEventListener('click', () => {
 //                alert(`You selected: ${category.textContent}`);
-                console.log(category.textContent);
-              });
+                        console.log(category.textContent);
+                    });
+                });
             });
-          });
 
         </script>
-        
+
     </body>
 </html>
