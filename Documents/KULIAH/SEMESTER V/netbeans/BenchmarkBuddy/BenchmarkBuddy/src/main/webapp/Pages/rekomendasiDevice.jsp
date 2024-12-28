@@ -202,9 +202,9 @@
                 transform: scale(1.05);
             }
 
-                .rounded-lg {
-                    border-radius: 10px;
-                }
+            .rounded-lg {
+                border-radius: 10px;
+            }
 
             ul {
                 list-style: none;
@@ -295,11 +295,12 @@
                 <div class="products-grid">
                     <% for (Device device : displayDevices) {%>
                     <div class="product-card">
-                        <img src="https://via.placeholder.com/150" alt="Product Image">
+                        <!--<img src="<%= device.getPoster_url()%>" alt="Laptop Image">-->
+                        <img src="../PagesAssets/device-icon.png" alt="Laptop Image">
                         <h3><%= device.getName()%></h3>
                         <p>Price: <%= device.getPrice()%></p>
                         <button type="button" onclick="window.location.href = '${pageContext.request.contextPath}/DeviceServlet?action=showDevices&idDevices=<%=device.getDeviceId()%>'">Pelajari Lebih Lanjut</button> <br>
-                        <input type="checkbox"> Bandingkan
+<!--                        <input type="checkbox"> Bandingkan-->
                     </div>
                     <% } %>
                 </div>

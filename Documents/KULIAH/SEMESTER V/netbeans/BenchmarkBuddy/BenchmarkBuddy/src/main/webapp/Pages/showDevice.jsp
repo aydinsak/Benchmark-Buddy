@@ -68,7 +68,7 @@
             }
 
             img.product-image {
-                max-width: 100%;
+                max-width: 50%;
                 border-radius: 5px;
                 margin-bottom: 20px;
             }
@@ -76,7 +76,7 @@
             a{
                 text-decoration: none;
             }
-            
+
             .btn-back {
                 margin: 10px 0 20px 20px; /* Atur jarak sesuai kebutuhan */
                 background-color: #ff6a00;
@@ -94,10 +94,11 @@
                 background-color: #e65a00;
                 transform: scale(1.05);
             }
-            
+
             .rounded-lg {
                 border-radius: 10px;
             }
+
         </style>
     </head>
     <%
@@ -109,10 +110,14 @@
             Kembali ke List Rekomendasi
         </button>
         <main>
-            <img src="<%= device.getName()%>" alt="Asus Rog Flow X13" class="product-image">
+            <!--            <a href="https://ibb.co.com/2Zf7Mdv" class="product-link">
+                            <img src="<%= device.getPoster_url()%>" alt="Laptop" border="0" class="product-image" />
+                        </a>-->
+
+            <img src="<%= device.getPoster_url()%>" alt="laptop-img" class="product-image">
             <div class="product-title"><%= device.getName()%></div>
             <div class="product-price"<%= device.getName()%></div>
-            <div class="price">Harga: Rp.<%= device.getPrice() %></div>
+            <div class="price">Harga: Rp.<%= device.getPrice()%></div>
             <div class="category">Kategori: <%= device.getCategory()%> Laptop</div>
             <%
                 if (!device.getUrl().isEmpty()) {%>

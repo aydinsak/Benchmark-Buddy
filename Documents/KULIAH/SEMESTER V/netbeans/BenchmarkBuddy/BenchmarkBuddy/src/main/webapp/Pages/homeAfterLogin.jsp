@@ -62,7 +62,6 @@
                 font-size: 1rem;
             }
             
-            
             .hero {
                 display: flex;
                 align-items: center;
@@ -74,7 +73,7 @@
             }
 
             .hero img {
-                width: 150px;
+                width: 200px;
                 margin-right: 20px;
             }
 
@@ -137,7 +136,7 @@
 
 
         <section class="hero">
-            <img src="https://via.placeholder.com/150" alt="Laptop Illustration">
+            <img src="../PagesAssets/user-icon.png" alt="Laptop Illustration">
             <div class="hero-content">
                 <h2>WELCOME <%= username%></h2>
                 <p>Click below to choose your needs or Logout from website</p>
@@ -151,9 +150,6 @@
                         Logout User from <%= username%>
                     </button>
                 </form>
-
-
-
             </div>
         </section>
 

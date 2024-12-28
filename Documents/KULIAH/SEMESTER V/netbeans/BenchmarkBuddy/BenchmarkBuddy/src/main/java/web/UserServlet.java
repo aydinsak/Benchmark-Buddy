@@ -98,9 +98,9 @@ public class UserServlet extends HttpServlet {
         boolean validateUser = userDAO.insertUser(user, email, password);
 
         if (validateUser) {
-            response.sendRedirect("Pages/login.jsp");
+            response.sendRedirect("Pages/login.jsp?regMsg=Register+berhasil");
         } else {
-            response.sendRedirect("Pages/login.jsp?error=username+sudah+ada");
+            response.sendRedirect("Pages/registration.jsp?error=Username+sudah+ada");
 //            response.getWriter().print("Gagal");
         }
     }

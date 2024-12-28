@@ -104,19 +104,16 @@ public class DeviceDAO {
 
         return devices;
     }
-    
-    
+
     public Device selectDevice(int device_id) {
         String sql = "SELECT * FROM device WHERE device_id = ?";
-       
 
         try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, device_id);
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()) {
-              
+            if (rs.next()) {
 
                 String name = rs.getString("name");
                 String brand = rs.getString("brand");
@@ -132,16 +129,13 @@ public class DeviceDAO {
                 String Processor = rs.getString("processor");
                 String url = rs.getString("url");
                 String poster_url = rs.getString("poster_url");
-                
-                Device device=new Device(device_id, name, brand, Category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, Processor);  
-                
-            device.setUrl(url);
-            device.setPoster_url(poster_url);
-                
-             return  device;
-                
 
-               
+                Device device = new Device(device_id, name, brand, Category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, Processor);
+
+                device.setUrl(url);
+                device.setPoster_url(poster_url);
+
+                return device;
 
             }
         } catch (SQLException e) {
@@ -150,21 +144,20 @@ public class DeviceDAO {
 
         return null;
     }
-    
+
     public boolean insertDevice(String name, String brand, String category, int price, String operatingSystem, String battery,
-                                String storage, int memory, String display, String graphicsCard, String graphicsCardType, String processor,
-                                String Url, String poster_url) {
+            String storage, int memory, String display, String graphicsCard, String graphicsCardType, String processor,
+            String Url, String poster_url) {
         // SQL Query (excluding device_id)
-        String sql = "INSERT INTO device (name, brand, category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, processor, url, poster_url) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO device (name, brand, category, price, operatingSystem, battery, storage, memory, display, graphicsCard, graphicsCardType, processor, url, poster_url) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             // Load MySQL Driver
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             // Establish database connection and prepare statement
-            try (Connection conn = DriverManager.getConnection(url,user,pasword);
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+            try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
                 // Set values for the query parameters
                 stmt.setString(1, name);

@@ -77,7 +77,7 @@
                 font-size: 1.2rem;
                 font-weight: 500;
                 letter-spacing: 1px;
-                margin-top: 1.7rem;
+                margin-top: 1rem;
                 cursor: pointer;
                 transition: 0.4s;
             }
@@ -96,18 +96,33 @@
                 text-decoration: underline;
             }
 
+            .error-msg {
+                text-align: center;
+                color: #d8000c;
+                background-color: #ffbaba;
+                border: 1px solid #d8000c;
+                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 10px;
+                font-size: 16px;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="registration form">
                 <header>Signup</header>
+                    <% if (request.getParameter("error") != null) {%>
+                <div class="error-msg">
+                    <%= request.getParameter("error")%>
+                </div>
+                <% }%>
                 <form action="${pageContext.request.contextPath}/UserServlet" method="post">
                     <input type="hidden" name="action" value="register">
                     <input type="text" name="username" placeholder="Enter your name" required />
                     <input type="text" name="email" placeholder="Enter your email" required />
                     <input type="password" name="password" placeholder="Create a password" required />
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <input type="submit" class="button">
                 </form>
                 <div class="signup">
                     <span class="signup">
@@ -115,11 +130,7 @@
                         <a href="login.jsp">Login</a>
                     </span>
                 </div>
-                <% if (request.getParameter("error") != null) {%>
-                <div class="error">
-                    <%= request.getParameter("error")%>
-                </div>
-                <% } %>
+
             </div>
         </div>
     </body>

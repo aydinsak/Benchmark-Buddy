@@ -104,7 +104,7 @@ public class DeviceServlet extends HttpServlet {
             request.getSession().setAttribute("filteredDevice", FilteredDevices);
        }
       
-        request.getSession().setAttribute("recommendedDevices", null);
+       request.getSession().setAttribute("recommendedDevices", null);
        response.sendRedirect(request.getContextPath() +"/Pages/rekomendasiDevice.jsp");
        
     }
