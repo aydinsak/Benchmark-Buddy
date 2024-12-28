@@ -4,6 +4,8 @@
     Author     : Aydin Shidqi
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="model.Device"%>
 <%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -61,7 +63,7 @@
                 margin-left: 15px;
                 font-size: 1rem;
             }
-            
+
             .hero {
                 display: flex;
                 align-items: center;
@@ -151,7 +153,7 @@
                     </button>
                 </form>
             </div>
-        </section>
+        </section>         
 
         <footer>
             © 2024 BenchmarkBuddy

@@ -108,7 +108,7 @@
         <%@include file="header.jsp"%>
         <button type="button" class="btn btn-back rounded-lg" onclick="window.location.href = '${pageContext.request.contextPath}/Pages/rekomendasiDevice.jsp'">
             Kembali ke List Rekomendasi
-        </button>
+        </button><br>
 
         <!--            <a href="https://ibb.co.com/2Zf7Mdv" class="product-link">
                         <img src="<%= device.getPoster_url()%>" alt="Laptop" border="0" class="product-image" />
@@ -122,8 +122,7 @@
         %>
         <img src="<%= finalUrl%>" alt="laptop-img" class="product-image">
         <div class="product-title"><%= device.getName()%></div>
-        <div class="product-price"><%= device.getName()%></div>
-        <div class="price">Harga: Rp.<%= device.getPrice()%></div>
+        <div class="product-price">Rp.<%= device.getPrice()%></div>
         <div class="category">Kategori: <%= device.getCategory()%> Laptop</div>
 
         <%

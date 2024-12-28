@@ -57,10 +57,30 @@ public class DeviceServlet extends HttpServlet {
             getDeviceByCategory(request, response);
         } else if ("showDevices".equals(action)) {
             ShowDevices(request, response);
-        } else if ("showAllDevicesAdmin".equals(action)){
+            response.sendRedirect(request.getContextPath() + "/Pages/showDevice.jsp");
+        } else if ("showAllDevicesAdmin".equals(action)) {
             showAllDevices(request, response);
-            response.sendRedirect("Pages/HalamanAdmin.jsp");
+            String msg = request.getParameter("msg");
+            if (msg != null) {
+                if ("edit".equals(msg)) {
+                    response.sendRedirect("Pages/HalamanAdmin.jsp?msg=Device+berhasil+diubah");
+                } else if ("add".equals(msg)) {
+                    response.sendRedirect("Pages/HalamanAdmin.jsp?msg=Device+berhasil+ditambah");
+                } else if ("del".equals(msg)) {
+                    response.sendRedirect("Pages/HalamanAdmin.jsp?msg=Device+berhasil+dihapus");
+                }
+            } else {
+                response.sendRedirect("Pages/HalamanAdmin.jsp");
+            }
+        } else if ("showDeviceEdit".equals(action)) {
+            ShowDevices(request, response);
+            response.sendRedirect(request.getContextPath() + "/Pages/EditDevice.jsp");
+        } else if ("deleteDevice".equals(action)) {
+            deleteDevice(request, response);
+        } else if ("searchDevice".equals(action)){
+            searchDevice(request, response);
         }
+
     }
 
     @Override
@@ -69,6 +89,8 @@ public class DeviceServlet extends HttpServlet {
 
         if ("tambahDevice".equals(action)) {
             tambahDevice(request, response);
+        } else if ("editDevice".equals(action)) {
+            editDevice(request, response);
         }
     }
 
@@ -92,8 +114,8 @@ public class DeviceServlet extends HttpServlet {
         );
 
         // Set recommended devices to request and forward to JSP (or return as JSON)
-        request.getSession().setAttribute("filteredDevice", null);
-        request.getSession().setAttribute("recommendedDevices", devices);
+       
+        request.getSession().setAttribute("displayDevice", devices);
         response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp");
 
     }
@@ -103,12 +125,12 @@ public class DeviceServlet extends HttpServlet {
 
         List<Device> FilteredDevices = deviceDAO.selectFilter(category);
         if (FilteredDevices == null || FilteredDevices.isEmpty()) {
-            request.getSession().setAttribute("filteredDevice", null);
+            request.getSession().setAttribute("displayDevice", null);
         } else {
-            request.getSession().setAttribute("filteredDevice", FilteredDevices);
+            request.getSession().setAttribute("displayDevice", FilteredDevices);
         }
 
-        request.getSession().setAttribute("recommendedDevices", null);
+        
         response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp");
 
     }
@@ -122,8 +144,28 @@ public class DeviceServlet extends HttpServlet {
         } else {
             request.getSession().setAttribute("singleDevice", singleDevice);
         }
+    }
 
-        response.sendRedirect(request.getContextPath() + "/Pages/showDevice.jsp");
+    protected void deleteDevice(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String idDevice = request.getParameter("idDevice");
+
+        try {
+            int deviceId = Integer.parseInt(idDevice);
+
+            // Call the DAO to delete the device
+            boolean isDeleted = deviceDAO.deleteDevice(deviceId);
+
+            if (isDeleted) {
+                // If successful, redirect to the admin page with updated device list
+                response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=showAllDevicesAdmin&msg=del");
+            } else {
+                // If failed, redirect to the admin page with an error message
+                response.sendRedirect("Pages/HalamanAdmin.jsp?error=Device+gagal+dihapus");
+            }
+        } catch (NumberFormatException e) {
+            // Handle invalid device ID format
+            response.sendRedirect("Pages/HalamanAdmin.jsp?error=ID+perangkat+tidak+valid");
+        }
     }
 
     protected void showAllDevices(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -133,6 +175,26 @@ public class DeviceServlet extends HttpServlet {
             request.getSession().setAttribute("allDevices", null);
         } else {
             request.getSession().setAttribute("allDevices", devices);
+        }
+    }
+
+    protected void searchDevice(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String deviceName = request.getParameter("deviceName");
+
+        if (deviceName == null || deviceName.trim().isEmpty()) {
+            request.getSession().setAttribute("displayDevice", null);
+            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?error=Nama+device+tidak+boleh+kosong");
+            return;
+        }
+
+        List<Device> searchResult = deviceDAO.searchDevice(deviceName);
+
+        if (searchResult == null || searchResult.isEmpty()) {
+            request.getSession().setAttribute("displayDevice", null);
+            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?error=Device+tidak+ditemukan");
+        } else {
+            request.getSession().setAttribute("displayDevice", searchResult);
+            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp");
         }
     }
 
@@ -175,11 +237,59 @@ public class DeviceServlet extends HttpServlet {
         // Handle the result of the operation
         if (deviceAdded) {
 //            response.getWriter().println("Berhasil");
-            response.sendRedirect("Pages/HalamanAdmin.jsp?msg=Device+berhasil+ditambahkan");
+            response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=showAllDevicesAdmin&msg=add");
+
         } else {
 //            response.getWriter().println("Failed to add the device. Please try again.");
             response.sendRedirect("Pages/HalamanAdmin.jsp?error=Device+gagal+ditambahkan");
         }
     }
 
+    protected void editDevice(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Extract parameters from the request
+        String name = request.getParameter("name");
+        String brand = request.getParameter("brand");
+        String category = request.getParameter("category");
+        int price = Integer.parseInt(request.getParameter("price"));
+        String operatingSystem = request.getParameter("operatingSystem");
+        String battery = request.getParameter("battery");
+        String storage = (request.getParameter("storage"));
+        int memory = Integer.parseInt(request.getParameter("memory"));
+        String display = request.getParameter("display");
+        String graphicsCard = request.getParameter("graphicsCard");
+        String graphicsCardType = request.getParameter("graphicsCardType");
+        String processor = request.getParameter("processor");
+        String url = request.getParameter("url");
+        String idDevice = request.getParameter("idDevice");
+        int id = Integer.parseInt(idDevice);
+
+        Part filePart = request.getPart("image");
+        String fileName = filePart.getSubmittedFileName();
+        String filePath = uploadDirectory + File.separator + fileName;
+
+        // Save the file to the server4
+        File fileSaveDir = new File(uploadDirectory);
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdirs(); // Create the directory if it does not exist
+        }
+        filePart.write(filePath);
+
+        // Relative path to store in the database
+        String relativePath = "images_device/" + fileName;
+        // Call the DAO to insert the device into the database
+        boolean deviceEdited = deviceDAO.editDevice(id,
+                name, brand, category, price, operatingSystem, battery,
+                storage, memory, display, graphicsCard, graphicsCardType,
+                processor, url, relativePath
+        );
+
+        // Handle the result of the operation
+        if (deviceEdited) {
+//            response.getWriter().println("Berhasil");
+            response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=showAllDevicesAdmin&msg=edit");
+        } else {
+//            response.getWriter().println("Failed to add the device. Please try again.");
+            response.sendRedirect("Pages/HalamanAdmin.jsp?error=Device+gagal+diubah");
+        }
+    }
 }

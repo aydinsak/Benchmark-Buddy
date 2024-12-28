@@ -28,9 +28,37 @@
             margin: 0;
         }
 
-        header input {
-            padding: 5px;
+        header .search-container {
+            display: flex;
+            align-items: center;
             width: 50%;
+        }
+
+        header .search-container input {
+            padding: 8px 15px;
+            width: calc(100% - 40px);
+            border: none;
+            border-radius: 20px 0 0 20px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        header .search-container button {
+            background-color: white;
+            border: none;
+            border-radius: 0 20px 20px 0;
+            padding: 8px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff6600;
+            font-size: 16px;
+            border-left: 1px solid #ddd;
+        }
+
+        header .search-container button:hover {
+            background-color: #ffe6cc;
         }
 
         header a {
@@ -43,11 +71,14 @@
     <body>
         <header>
             <h1>Benchmark Buddy</h1>
-            <!--<input type="text" placeholder="Search...">-->
+            <div class="search-container">
+                <form action="${pageContext.request.contextPath}/DeviceServlet" method="get" style="display: flex; width: 100%;">
+                    <input type="hidden" name="action" value="searchDevice">
+                    <input type="text" placeholder="Search..." name="deviceName">
+                    <button type="submit">🔍</button>
+                </form>
+            </div>
             <a href="${pageContext.request.contextPath}/Pages/homeAfterLogin.jsp">HOME</a>
-            <!--<a href="#"><img src="user-icon.png" alt="Profile" height="30"></a>-->
-            <!--<a href="#">👤 Profile</a>-->
         </header>    
     </body>
-
 </html>

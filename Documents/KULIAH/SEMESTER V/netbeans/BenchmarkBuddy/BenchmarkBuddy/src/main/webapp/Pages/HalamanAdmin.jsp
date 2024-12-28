@@ -1,4 +1,3 @@
-
 <%@page import="java.util.List"%>
 <%@page import="model.Device"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -7,7 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>HalamanAdmin</title>
+        <title>Halaman Admin</title>
         <style>
             body {
                 margin: 0;
@@ -339,19 +338,6 @@
         <div style="height: 35px; background-color: #ff6600; margin: 20px;"></div>
 
         <div class="container">   
-            <!--            <div class="filter">
-                            <div class="filter-header">FILTER</div>
-                            <div class="filter-category">
-                                <h3>Kategori</h3>
-                                <ul>
-                                    <li>Gaming Laptop</li>
-                                    <li>Office Laptop</li>
-                                    <li>Students Laptop</li>
-                                    <li>Creators Laptop</li>
-                                    <li>Home Laptop</li>
-                                </ul>
-                            </div>
-                        </div>-->
             <div class="content">
                 <button id="add-device-btn">+ Tambah Device</button>
                 <div class="deviceList">
@@ -373,8 +359,11 @@
                             <!--<img src="https://via.placeholder.com/150" alt="Product Image">-->
                             <h3><%= device.getName()%></h3>
                             <p>Price: <%= device.getPrice()%></p>
-                            <button>Edit Device</button>
-                            <button>Hapus Device</button>
+                            <a href="${pageContext.request.contextPath}/DeviceServlet?action=showDeviceEdit&idDevices=<%= device.getDeviceId()%>">Edit Device</a>
+
+                            <!--<button>Hapus Device</button>-->
+                            <a href="${pageContext.request.contextPath}/DeviceServlet?action=deleteDevice&idDevice=<%= device.getDeviceId()%>">Hapus Device</a>
+
                         </div>
                         <% } %>
                     </div>
@@ -430,7 +419,7 @@
                             <input type="text" id="deviceBattery" name="battery" placeholder="Example: 6 hours">
 
                             <label for="deviceImage">Gambar</label>
-                            <input type="file" id="deviceImage" name="image" accept="image/*">
+                            <input type="file" id="deviceImage" name="image" accept="image/*" required>
 
                             <button type="submit">Simpan Device</button>
                         </form>

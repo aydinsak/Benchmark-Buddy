@@ -236,17 +236,13 @@
         </button>
         <%
             // Retrieve the devices list from the session
-            List<Device> devices = (List<Device>) request.getSession().getAttribute("recommendedDevices");
-            List<Device> FilteredDevices = (List<Device>) request.getSession().getAttribute("filteredDevice");
-            List<Device> displayDevices = new ArrayList<>();
+           
 
-            // Check if FilteredDevices is not null and not empty
-            if (FilteredDevices != null && !FilteredDevices.isEmpty()) {
-                displayDevices = FilteredDevices;
-            } else if (devices != null) { // Fallback to devices if FilteredDevices is null or empty
-                displayDevices = devices;
-            }
+            List<Device> displayDevices = (List<Device>) request.getSession().getAttribute("displayDevice");
+
+            
         %>
+
 
 
         <div class="container">
@@ -291,6 +287,10 @@
                 <h2>Our Recommendation</h2>
                 <% if (displayDevices == null || displayDevices.isEmpty()) { %>
                 <p>No recommended devices are available at the moment.</p>
+                <%  if (request.getParameter("error") != null) {%>
+                <p>message: <%=request.getParameter("error")%> </p>
+                <%}%>
+
                 <% } else { %>
                 <div class="products-grid">
                     <% for (Device device : displayDevices) {%>
@@ -306,7 +306,7 @@
                         <h3><%= device.getName()%></h3>
                         <p>Price: <%= device.getPrice()%></p>
                         <button type="button" onclick="window.location.href = '${pageContext.request.contextPath}/DeviceServlet?action=showDevices&idDevices=<%=device.getDeviceId()%>'">Pelajari Lebih Lanjut</button> <br>
-                        <!--                        <input type="checkbox"> Bandingkan-->
+                        <!--<input type="checkbox"> Bandingkan-->
                     </div>
                     <% } %>
                 </div>

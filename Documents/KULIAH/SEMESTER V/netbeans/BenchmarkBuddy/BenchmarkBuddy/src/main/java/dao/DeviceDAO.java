@@ -219,4 +219,111 @@ public class DeviceDAO {
         return false; // Returns false if the insertion fails
     }
 
+    public boolean editDevice(int device_id, String name, String brand, String category, int price, String operatingSystem, String battery,
+            String storage, int memory, String display, String graphicsCard, String graphicsCardType, String processor,
+            String Url, String poster_url) {
+
+        // SQL Query for updating the device
+        String sql = "UPDATE device SET name = ?, brand = ?, category = ?, price = ?, operatingSystem = ?, battery = ?, "
+                + "storage = ?, memory = ?, display = ?, graphicsCard = ?, graphicsCardType = ?, processor = ?, url = ?, poster_url = ? "
+                + "WHERE device_id = ?";
+
+        try {
+            // Load MySQL Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Establish database connection and prepare statement
+            try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                // Set values for the query parameters
+                stmt.setString(1, name);
+                stmt.setString(2, brand);
+                stmt.setString(3, category);
+                stmt.setInt(4, price);
+                stmt.setString(5, operatingSystem);
+                stmt.setString(6, battery);
+                stmt.setString(7, storage);
+                stmt.setInt(8, memory);
+                stmt.setString(9, display);
+                stmt.setString(10, graphicsCard);
+                stmt.setString(11, graphicsCardType);
+                stmt.setString(12, processor);
+                stmt.setString(13, Url);
+                stmt.setString(14, poster_url);
+                stmt.setInt(15, device_id);
+
+                // Execute the query and check for success
+                return stmt.executeUpdate() > 0; // Returns true if at least one row was updated
+            }
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+
+        return false; // Returns false if the update fails
+    }
+
+    public List<Device> searchDevice(String name) {
+        List<Device> devices = new ArrayList<>();
+        String sql = "SELECT * FROM device WHERE name LIKE ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + name + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int device_id = rs.getInt("device_id");
+                String deviceName = rs.getString("name");
+                String brand = rs.getString("brand");
+                String category = rs.getString("category");
+                int price = rs.getInt("price");
+                String operatingSystem = rs.getString("operatingSystem");
+                String battery = rs.getString("battery");
+                String storage = rs.getString("storage");
+                int memory = rs.getInt("memory");
+                String display = rs.getString("display");
+                String graphicsCard = rs.getString("graphicsCard");
+                String graphicsCardType = rs.getString("graphicsCardType");
+                String processor = rs.getString("processor");
+                String url = rs.getString("url");
+                String poster_url = rs.getString("poster_url");
+
+                devices.add(new Device(device_id, deviceName, brand, category, price, operatingSystem, battery,
+                        storage, memory, display, graphicsCard, graphicsCardType, processor, poster_url));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return devices;
+    }
+
+    public boolean deleteDevice(int device_id) {
+        // SQL Query for deleting the device
+        String sql = "DELETE FROM device WHERE device_id = ?";
+
+        try {
+            // Load MySQL Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Establish database connection and prepare statement
+            try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                // Set the device_id for the query
+                stmt.setInt(1, device_id);
+
+                // Execute the query and check for success
+                return stmt.executeUpdate() > 0; // Returns true if at least one row was deleted
+            }
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+
+        return false; // Returns false if the deletion fails
+    }
+
 }

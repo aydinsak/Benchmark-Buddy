@@ -73,7 +73,7 @@ public class UserServlet extends HttpServlet {
             User user = userDAO.selectUser(email, password);
             request.getSession().setAttribute("user", user);
             
-             response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=showAllDevicesAdmin");
+            response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=showAllDevicesAdmin");
 
         } else {
 //            response.getWriter().print("Gagal");
