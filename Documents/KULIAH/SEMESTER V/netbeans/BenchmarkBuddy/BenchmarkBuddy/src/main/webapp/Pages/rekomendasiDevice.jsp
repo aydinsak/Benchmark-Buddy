@@ -236,11 +236,9 @@
         </button>
         <%
             // Retrieve the devices list from the session
-           
-
             List<Device> displayDevices = (List<Device>) request.getSession().getAttribute("displayDevice");
 
-            
+
         %>
 
 
@@ -281,7 +279,9 @@
                                 <input type="text" placeholder="Harga Minimum">
                                 <input type="text" placeholder="Harga Maksimum">-->
             </div>
+            <%                // Menghapus session preference ketika filter baru dipilih
 
+            %>
             <!-- Recommendation Section -->
             <div class="recommendation-section">
                 <h2>Our Recommendation</h2>
@@ -290,8 +290,14 @@
                 <%  if (request.getParameter("error") != null) {%>
                 <p>message: <%=request.getParameter("error")%> </p>
                 <%}%>
-
                 <% } else { %>
+                <%  if (request.getParameter("Query") != null) { //search device%>
+                <p>Menampilkan device dengan query: <%=request.getParameter("Query")%> </p>
+                <%} else if (request.getParameter("Filter") != null){//filter device%>
+                <p>Menampilkan device dengan filter: <%=request.getParameter("Filter")%> </p>
+                <%} else if (request.getParameter("Preference") != null){//preference device%>
+                <p><%=request.getParameter("Preference")%></p>
+                <%}%>
                 <div class="products-grid">
                     <% for (Device device : displayDevices) {%>
                     <div class="product-card">

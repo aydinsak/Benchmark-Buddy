@@ -116,7 +116,8 @@ public class DeviceServlet extends HttpServlet {
         // Set recommended devices to request and forward to JSP (or return as JSON)
        
         request.getSession().setAttribute("displayDevice", devices);
-        response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp");
+        response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Preference=Menampilkan+device+dengan+preference:"
+                + "+prosesor+'"+preference.getProcessor()+",'+jenis+kartu+'"+preference.getGraphicsCardType()+"',+dan+memori+'"+preference.getMemory()+"'+GB");
 
     }
 
@@ -131,7 +132,7 @@ public class DeviceServlet extends HttpServlet {
         }
 
         
-        response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp");
+        response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Filter="+category);
 
     }
 
@@ -191,10 +192,10 @@ public class DeviceServlet extends HttpServlet {
 
         if (searchResult == null || searchResult.isEmpty()) {
             request.getSession().setAttribute("displayDevice", null);
-            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?error=Device+tidak+ditemukan");
+            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?error=Device+dengan+query+'"+ deviceName +"'+tidak+ditemukan");
         } else {
             request.getSession().setAttribute("displayDevice", searchResult);
-            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp");
+            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Query="+deviceName);
         }
     }
 
