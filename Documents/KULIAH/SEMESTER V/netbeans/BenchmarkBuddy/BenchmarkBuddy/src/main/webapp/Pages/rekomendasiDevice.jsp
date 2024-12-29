@@ -118,6 +118,7 @@
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                 gap: 20px;
+                justify-content: flex-start;
             }
 
             .product-card {
@@ -128,10 +129,12 @@
                 text-align: center;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                 transition: transform 0.3s ease, box-shadow 0.3s ease;
+                width: 210px; /* Lebar tetap */
+                height: 350px; /* Tinggi tetap */
             }
 
             .product-card:hover {
-                transform: scale(1.05);
+                transform: scale(1.015);
                 box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
             }
 
@@ -293,9 +296,9 @@
                 <% } else { %>
                 <%  if (request.getParameter("Query") != null) { //search device%>
                 <p>Menampilkan device dengan query: <%=request.getParameter("Query")%> </p>
-                <%} else if (request.getParameter("Filter") != null){//filter device%>
+                <%} else if (request.getParameter("Filter") != null) {//filter device%>
                 <p>Menampilkan device dengan filter: <%=request.getParameter("Filter")%> </p>
-                <%} else if (request.getParameter("Preference") != null){//preference device%>
+                <%} else if (request.getParameter("Preference") != null) {//preference device%>
                 <p><%=request.getParameter("Preference")%></p>
                 <%}%>
                 <div class="products-grid">

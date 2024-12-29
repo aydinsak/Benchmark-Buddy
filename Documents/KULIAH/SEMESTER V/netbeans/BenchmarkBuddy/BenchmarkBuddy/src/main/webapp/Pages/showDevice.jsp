@@ -22,38 +22,66 @@
                 border-radius: 5px;
             }
 
-            .product-title {
+            .content-wrapper {
+                display: flex;
+                align-items: center; /* Menyelaraskan secara vertikal */
+                justify-content: center; /* Menyelaraskan secara horizontal */
+                margin: 20px;
+                text-align: left; /* Atur teks agar rata kiri */
+            }
+
+            img.product-image {
+                max-width: 40%; /* Batas lebar gambar */
+                margin-right: 20px; /* Jarak antara gambar dan teks */
+                border-radius: 5px;
+            }
+
+            .text-content {
+                max-width: 60%; /* Batas lebar teks */
+            }
+
+            .text-content .product-title {
                 font-size: 24px;
                 font-weight: bold;
                 margin-bottom: 10px;
             }
 
-            .product-price {
+            .text-content .product-price {
                 font-size: 22px;
                 color: #ff6600;
                 margin: 10px 0;
             }
 
-            .category {
-                font-size: 16px;
-                margin-bottom: 20px;
-            }
-            .price {
+            .text-content .category {
                 font-size: 16px;
                 margin-bottom: 20px;
             }
 
-            .shop-button {
-                display: flex;
-                align-items: center;
-                margin-top: 20px;
+            .text-content .shop-button a {
+                display: inline-block;
+                background: linear-gradient(45deg, #ff6a00, #ff9500);
+                color: white;
+                text-decoration: none;
+                padding: 10px 20px;
+                border-radius: 5px;
                 font-size: 16px;
+                font-weight: bold;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .text-content .shop-button a:hover {
+                background: linear-gradient(45deg, #ff9500, #ff6a00);
+                transform: scale(1.05);
+                box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
             }
 
             table {
-                width: 100%;
+                width: 80%;
+                max-width: 1000px;
                 border-collapse: collapse;
-                margin-top: 20px;
+                margin: 20px auto;
+                border: 1px solid #ddd;
             }
 
             th, td {
@@ -67,18 +95,8 @@
                 color: white;
             }
 
-            img.product-image {
-                max-width: 50%;
-                border-radius: 5px;
-                margin-bottom: 20px;
-            }
-
-            a{
-                text-decoration: none;
-            }
-
             .btn-back {
-                margin: 10px 0 20px 20px; /* Atur jarak sesuai kebutuhan */
+                margin: 10px 0 20px 20px;
                 background-color: #ff6a00;
                 color: #fff;
                 border: none;
@@ -94,15 +112,14 @@
                 background-color: #e65a00;
                 transform: scale(1.05);
             }
-
-            .rounded-lg {
-                border-radius: 10px;
-            }
-
         </style>
     </head>
     <%
         Device device = (Device) request.getSession().getAttribute("singleDevice");
+        String posterUrl = device.getPoster_url();
+        String finalUrl = posterUrl.contains("images_device")
+                ? ((HttpServletRequest) request).getContextPath() + "/" + posterUrl
+                : posterUrl;
     %>
     <body>
         <%@include file="header.jsp"%>
@@ -110,27 +127,21 @@
             Kembali ke List Rekomendasi
         </button><br>
 
-        <!--            <a href="https://ibb.co.com/2Zf7Mdv" class="product-link">
-                        <img src="<%= device.getPoster_url()%>" alt="Laptop" border="0" class="product-image" />
-                    </a>-->
+        <div class="content-wrapper">
+            <img src="<%= finalUrl%>" alt="laptop-img" class="product-image">
+            <div class="text-content">
+                <div class="product-title"><%= device.getName()%></div>
+                <div class="product-brand">Merek: <%= device.getBrand()%></div>
+                <div class="product-price">Rp.<%= device.getPrice()%></div>
+                <div class="category">Kategori: <%= device.getCategory()%> Laptop</div>
+                <% if (!device.getUrl().isEmpty()) {%>
+                <div class="shop-button">
+                    <a href="<%= device.getUrl()%>" target="_blank">Official Website</a>
+                </div>
+                <% }%>
+            </div>
+        </div>
 
-        <%
-            String posterUrl = device.getPoster_url();
-            String finalUrl = posterUrl.contains("images_device")
-                    ? ((HttpServletRequest) request).getContextPath() + "/" + posterUrl
-                    : posterUrl;
-        %>
-        <img src="<%= finalUrl%>" alt="laptop-img" class="product-image">
-        <div class="product-title"><%= device.getName()%></div>
-        <div class="product-price">Rp.<%= device.getPrice()%></div>
-        <div class="category">Kategori: <%= device.getCategory()%> Laptop</div>
-
-        <%
-                if (!device.getUrl().isEmpty()) {%>
-        <div class="shop-button"><a href="<%= device.getUrl()%>" target="_blank">Official Website</a> </div>
-        <%
-            }
-        %>
         <table>
             <tr>
                 <th>Spesifikasi</th>
@@ -165,7 +176,5 @@
                 <td><%= device.getBattery()%></td>
             </tr>
         </table>
-
     </body>
 </html>
-
