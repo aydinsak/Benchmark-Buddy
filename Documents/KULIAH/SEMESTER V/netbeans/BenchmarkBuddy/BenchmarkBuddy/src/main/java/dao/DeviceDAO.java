@@ -266,11 +266,12 @@ public class DeviceDAO {
 
     public List<Device> searchDevice(String name) {
         List<Device> devices = new ArrayList<>();
-        String sql = "SELECT * FROM device WHERE name LIKE ?";
+        String sql = "SELECT * FROM device WHERE name LIKE ? OR brand LIKE ?";
 
         try (Connection conn = DriverManager.getConnection(url, user, pasword); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, "%" + name + "%");
+            stmt.setString(2, "%" + name + "%");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

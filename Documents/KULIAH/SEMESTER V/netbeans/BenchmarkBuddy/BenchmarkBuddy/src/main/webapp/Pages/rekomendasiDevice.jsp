@@ -219,6 +219,28 @@
                 margin-bottom: 10px;
             }
 
+            .compare-btn {
+                background-color: #ff6a00;
+                color: #fff;
+                border: none;
+                padding: 8px 15px;
+                font-size: 0.9rem;
+                border-radius: 8px;
+                cursor: pointer;
+                text-align: left;
+                transition: all 0.3s ease;
+                margin-left: 10px; /* Posisi ke kiri */
+                margin-bottom: 10px; /* spacing biar tidak terlalu mepet bawahnya */
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                display: inline-block;
+            }
+
+            .compare-btn:hover {
+                background-color: #e65a00;
+                transform: scale(1.05);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            }
+
         </style>
     </head>
     <body>
@@ -294,31 +316,98 @@
                 <p>message: <%=request.getParameter("error")%> </p>
                 <%}%>
                 <% } else { %>
-                <%  if (request.getParameter("Query") != null) { //search device%>
-                <p>Menampilkan device dengan query: <%=request.getParameter("Query")%> </p>
-                <%} else if (request.getParameter("Filter") != null) {//filter device%>
-                <p>Menampilkan device dengan filter: <%=request.getParameter("Filter")%> </p>
-                <%} else if (request.getParameter("Preference") != null) {//preference device%>
-                <p><%=request.getParameter("Preference")%></p>
-                <%}%>
-                <div class="products-grid">
-                    <% for (Device device : displayDevices) {%>
-                    <div class="product-card">
-                        <%
-                            String posterUrl = device.getPoster_url();
-                            String finalUrl = posterUrl.contains("images_device")
-                                    ? ((HttpServletRequest) request).getContextPath() + "/" + posterUrl
-                                    : posterUrl;
-                        %>
-                        <img src="<%= finalUrl%>" alt="laptop-img" class="product-image">
-                        <!--<img src="../PagesAssets/device-icon.png" alt="Laptop Image">-->
-                        <h3><%= device.getName()%></h3>
-                        <p>Price: <%= device.getPrice()%></p>
-                        <button type="button" onclick="window.location.href = '${pageContext.request.contextPath}/DeviceServlet?action=showDevices&idDevices=<%=device.getDeviceId()%>'">Pelajari Lebih Lanjut</button> <br>
-                        <!--<input type="checkbox"> Bandingkan-->
+                <form action="${pageContext.request.contextPath}/DeviceServlet" method="get" id="compareForm">
+                    <button type="submit" class="compare-btn">
+                        Compare Selected
+                    </button>
+                    <p id="error-message" class="error-message" style="display: none;">Pilih minimal 2 atau 3 devices untuk membandingkan.</p>
+                    <%  if (request.getParameter("Query") != null) { //search device%>
+                    <p>Menampilkan device dengan query: <%=request.getParameter("Query")%> </p>
+                    <%} else if (request.getParameter("Filter") != null) {//filter device%>
+                    <p>Menampilkan device dengan filter: <%=request.getParameter("Filter")%> </p>
+                    <%} else if (request.getParameter("Preference") != null) {//preference device%>
+                    <p><%=request.getParameter("Preference")%></p>
+                    <%}%>
+                    <input type="hidden" name="action" value="compareDevices">
+                    <div id="selectedDevices"></div> <!-- Hidden inputs for selected device IDs -->
+                    <div class="products-grid">
+                        <% for (Device device : displayDevices) {%>
+                        <div class="product-card">
+                            <%
+                                String posterUrl = device.getPoster_url();
+                                String finalUrl = posterUrl.contains("images_device")
+                                        ? ((HttpServletRequest) request).getContextPath() + "/" + posterUrl
+                                        : posterUrl;
+                            %>
+                            <img src="<%= finalUrl%>" alt="laptop-img" class="product-image">
+                            <!--<img src="../PagesAssets/device-icon.png" alt="Laptop Image">-->
+                            <h3><%= device.getName()%></h3>
+                            <p>Price: <%= device.getPrice()%></p>
+                            <button type="button" onclick="window.location.href = '${pageContext.request.contextPath}/DeviceServlet?action=showDevices&idDevices=<%=device.getDeviceId()%>'">Pelajari Lebih Lanjut</button> <br>
+                            <!--<input type="checkbox"> Bandingkan-->
+                            <label>
+                                <input type="checkbox" class="compare-checkbox" value="<%= device.getDeviceId()%>" onchange="updateSelectedDevices(this)">
+                                Compare
+                            </label>
+                        </div>
+                        <% } %>
+
                     </div>
-                    <% } %>
-                </div>
+
+                </form>
+
+                <script>
+                    // Store selected device IDs
+                    let selectedDeviceIds = new Set();
+
+                    // Get the compare button element
+                    const compareBtn = document.querySelector('.compare-btn');
+                    const errorMessage = document.getElementById('error-message');
+
+                    // Function to update selected devices when a checkbox is checked/unchecked
+                    function updateSelectedDevices(checkbox) {
+                        const deviceId = checkbox.value;
+                        if (checkbox.checked) {
+                            selectedDeviceIds.add(deviceId);
+                        } else {
+                            selectedDeviceIds.delete(deviceId);
+                        }
+                        updateHiddenInputs();
+                        toggleCompareButton();
+                    }
+
+                    // Update hidden inputs in the form with selected device IDs
+                    function updateHiddenInputs() {
+                        const selectedDevicesContainer = document.getElementById('selectedDevices');
+                        selectedDevicesContainer.innerHTML = ''; // Clear existing hidden inputs
+                        selectedDeviceIds.forEach(deviceId => {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'deviceIds';
+                            input.value = deviceId;
+                            selectedDevicesContainer.appendChild(input);
+                        });
+                    }
+
+                    function toggleCompareButton() {
+                        const minCheckbox = 2;
+                        const maxCheckbox = 3;
+
+                        if (selectedDeviceIds.size >= minCheckbox && selectedDeviceIds.size <= maxCheckbox) {
+                            compareBtn.style.display = 'block';
+                            errorMessage.style.display = 'none';
+                        } else {
+                            compareBtn.style.display = 'none';
+                            if (selectedDeviceIds.size > 0) {
+                                errorMessage.style.display = 'block';
+                            } else {
+                                errorMessage.style.display = 'none';
+                            }
+                        }
+                    }
+
+                    toggleCompareButton();
+                </script>
                 <% }%>
             </div>
         </div>

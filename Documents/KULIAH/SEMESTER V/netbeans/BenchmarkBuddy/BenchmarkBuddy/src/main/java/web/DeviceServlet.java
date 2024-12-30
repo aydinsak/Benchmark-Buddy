@@ -6,6 +6,7 @@ package web;
 
 import dao.DeviceDAO;
 import dao.UserDAO;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import model.Device;
 import model.Preference;
@@ -77,8 +79,10 @@ public class DeviceServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/Pages/EditDevice.jsp");
         } else if ("deleteDevice".equals(action)) {
             deleteDevice(request, response);
-        } else if ("searchDevice".equals(action)){
+        } else if ("searchDevice".equals(action)) {
             searchDevice(request, response);
+        } else if ("compareDevices".equals(action)) {
+            compareDevices(request, response);
         }
 
     }
@@ -114,10 +118,9 @@ public class DeviceServlet extends HttpServlet {
         );
 
         // Set recommended devices to request and forward to JSP (or return as JSON)
-       
         request.getSession().setAttribute("displayDevice", devices);
         response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Preference=Menampilkan+device+dengan+preference:"
-                + "+prosesor+'"+preference.getProcessor()+",'+jenis+kartu+'"+preference.getGraphicsCardType()+"',+dan+memori+'"+preference.getMemory()+"'+GB");
+                + "+prosesor+'" + preference.getProcessor() + ",'+jenis+kartu+'" + preference.getGraphicsCardType() + "',+dan+memori+'" + preference.getMemory() + "'+GB");
 
     }
 
@@ -131,8 +134,7 @@ public class DeviceServlet extends HttpServlet {
             request.getSession().setAttribute("displayDevice", FilteredDevices);
         }
 
-        
-        response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Filter="+category);
+        response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Filter=" + category);
 
     }
 
@@ -192,10 +194,10 @@ public class DeviceServlet extends HttpServlet {
 
         if (searchResult == null || searchResult.isEmpty()) {
             request.getSession().setAttribute("displayDevice", null);
-            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?error=Device+dengan+query+'"+ deviceName +"'+tidak+ditemukan");
+            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?error=Device+dengan+query+'" + deviceName + "'+tidak+ditemukan");
         } else {
             request.getSession().setAttribute("displayDevice", searchResult);
-            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Query="+deviceName);
+            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Query=" + deviceName);
         }
     }
 
@@ -292,5 +294,25 @@ public class DeviceServlet extends HttpServlet {
 //            response.getWriter().println("Failed to add the device. Please try again.");
             response.sendRedirect("Pages/HalamanAdmin.jsp?error=Device+gagal+diubah");
         }
+    }
+
+    protected void compareDevices(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String[] deviceIds = request.getParameterValues("deviceIds");
+        // Retrieve the selected device IDs
+       
+
+        if (deviceIds != null) {
+            List<Device> selectedDevices = new ArrayList<>();
+            for (String id : deviceIds) {
+                // Fetch each device from the database or service
+                Device device = deviceDAO.selectDevice(Integer.parseInt(id));
+                selectedDevices.add(device);
+            }
+
+            // Forward the list to another JSP page
+            request.getSession().setAttribute("selectedDevices", selectedDevices);
+            response.sendRedirect("Pages/compare.jsp");
+        }
+
     }
 }
