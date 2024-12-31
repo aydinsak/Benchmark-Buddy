@@ -1,7 +1,16 @@
+<%@page import="model.User"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Device"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%
+    User user = (User) request.getSession().getAttribute("user");
+    if (user == null) {
+        // Redirect to login page if the user is not logged in
+        response.sendRedirect("../UserServlet?action=invalid");
+        return;
+    }
+%>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -112,7 +121,6 @@
 
     <body>
         <%@include file="header.jsp"%>
-
         <button type="button" class="btn btn-back rounded-lg" onclick="window.location.href = '${pageContext.request.contextPath}/Pages/rekomendasiDevice.jsp'">
             Kembali ke List Rekomendasi
         </button><br>
@@ -121,8 +129,7 @@
             <thead>
                 <tr>
                     <th>Spesifikasi</th>
-
-                    <% for (Device device : devices) {%>
+                        <% for (Device device : devices) {%>
                     <th>
                         <%
                             String posterUrl = device.getPoster_url();

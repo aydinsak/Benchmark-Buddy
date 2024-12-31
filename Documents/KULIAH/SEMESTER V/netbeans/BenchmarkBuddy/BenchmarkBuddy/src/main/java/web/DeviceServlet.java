@@ -41,14 +41,6 @@ public class DeviceServlet extends HttpServlet {
         deviceDAO = new DeviceDAO();
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-
-        }
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -83,6 +75,8 @@ public class DeviceServlet extends HttpServlet {
             searchDevice(request, response);
         } else if ("compareDevices".equals(action)) {
             compareDevices(request, response);
+        } else if ("invalid".equals(action)) {
+            invalidSession(request, response);
         }
 
     }
@@ -102,25 +96,26 @@ public class DeviceServlet extends HttpServlet {
         // Get user from session
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            throw new ServletException("User is not logged in or session has expired.");
+            response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=invalid");
+//            throw new ServletException("User is not logged in or session has expired.");
         }
 
         // Get user preferences
         Preference preference = user.getPreference();
         if (preference == null) {
-            throw new ServletException("User preferences are not set.");
+            response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=invalid");
+//            throw new ServletException("User preferences are not set.");
+        } else {
+            List<Device> devices = deviceDAO.getRecommendedDevice(
+                    preference.getProcessor(),
+                    preference.getGraphicsCardType(),
+                    preference.getMemory()
+            );
+            // Set recommended devices to request and forward to JSP (or return as JSON)
+            request.getSession().setAttribute("displayDevice", devices);
+            response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Preference=Menampilkan+device+dengan+preference:"
+                    + "+prosesor+'" + preference.getProcessor() + ",'+jenis+kartu+'" + preference.getGraphicsCardType() + "',+dan+memori+'" + preference.getMemory() + "'+GB");
         }
-
-        List<Device> devices = deviceDAO.getRecommendedDevice(
-                preference.getProcessor(),
-                preference.getGraphicsCardType(),
-                preference.getMemory()
-        );
-
-        // Set recommended devices to request and forward to JSP (or return as JSON)
-        request.getSession().setAttribute("displayDevice", devices);
-        response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Preference=Menampilkan+device+dengan+preference:"
-                + "+prosesor+'" + preference.getProcessor() + ",'+jenis+kartu+'" + preference.getGraphicsCardType() + "',+dan+memori+'" + preference.getMemory() + "'+GB");
 
     }
 
@@ -136,6 +131,10 @@ public class DeviceServlet extends HttpServlet {
 
         response.sendRedirect(request.getContextPath() + "/Pages/rekomendasiDevice.jsp?Filter=" + category);
 
+    }
+
+    public void invalidSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.sendRedirect("Pages/login.jsp?error=Session+invalid,+silakan+login+kembali");
     }
 
     protected void ShowDevices(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -299,7 +298,6 @@ public class DeviceServlet extends HttpServlet {
     protected void compareDevices(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] deviceIds = request.getParameterValues("deviceIds");
         // Retrieve the selected device IDs
-       
 
         if (deviceIds != null) {
             List<Device> selectedDevices = new ArrayList<>();

@@ -53,8 +53,14 @@ public class UserServlet extends HttpServlet {
         if ("login".equals(action)) {
             Login(request, response);
         } else if ("logout".equals(action)) {
-            Logout(request,response);
+            Logout(request, response);
+        } else if ("invalid".equals(action)) {
+            invalidSession(request, response);
         }
+    }
+
+    public void invalidSession(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.sendRedirect("Pages/login.jsp?error=Session+invalid,+silakan+login+kembali");
     }
 
     protected void Login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -72,7 +78,7 @@ public class UserServlet extends HttpServlet {
         } else if (validateAdmin) {
             User user = userDAO.selectUser(email, password);
             request.getSession().setAttribute("user", user);
-            
+
             response.sendRedirect(request.getContextPath() + "/DeviceServlet?action=showAllDevicesAdmin");
 
         } else {
@@ -82,7 +88,7 @@ public class UserServlet extends HttpServlet {
     }
 
     protected void Logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();

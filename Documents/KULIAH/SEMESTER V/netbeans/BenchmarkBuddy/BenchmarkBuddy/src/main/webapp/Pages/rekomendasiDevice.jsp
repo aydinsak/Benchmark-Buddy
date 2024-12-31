@@ -4,6 +4,7 @@
     Author     : Aydin Shidqi
 --%>
 
+<%@page import="model.User"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Device"%>
@@ -13,7 +14,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Benchmark Buddy</title>
+        <title>Our Recommendation - Benchmark Buddy</title>
         <style>
             /* General Reset */
             body, h1, h2, h3, p, ul, li, input {
@@ -245,17 +246,14 @@
     </head>
     <body>
         <%@include file="header.jsp" %>
-        <!--        <header>
-                    <h1>Benchmark Buddy</h1>
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search...">
-                        <img src="https://via.placeholder.com/20" alt="Search Icon">
-                    </div>
-                    <nav>
-                        <a href="#">HOME</a>
-                        <img src="https://via.placeholder.com/30" alt="User Icon">
-                    </nav>
-                </header>-->
+        <%
+        User user = (User) request.getSession().getAttribute("user");
+            if (user == null) {
+                // Redirect to login page if the user is not logged in
+                response.sendRedirect("../UserServlet?action=invalid");
+                return;
+            }
+        %>
         <button type="button" class="btn btn-back rounded-lg" onclick="window.location.href = '${pageContext.request.contextPath}/Pages/Rekomendasi.jsp'">
             Kembali ke pilihan Preference
         </button>

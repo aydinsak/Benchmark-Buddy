@@ -4,13 +4,22 @@
     Author     : Aydin Shidqi
 --%>
 
+<%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%
+    User user = (User) request.getSession().getAttribute("user");
+    if (user == null) {
+        // Redirect to login page if the user is not logged in
+        response.sendRedirect("../UserServlet?action=invalid");
+        return;
+    }
+%>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Benchmark Buddy</title>
+        <title>Choose your preference - Benchmark Buddy</title>
         <!--<link rel="stylesheet" href="index.css">-->
         <script src="https://kit.fontawesome.com/26fcc6aee9.js" crossorigin="anonymous"></script>
         <style>
@@ -119,11 +128,7 @@
     </head>
     <body>
         <%@include file="header.jsp" %>
-<!--        <header>
-            <h1>Benchmark Buddy</h1>
-            <a href="#">HOME</a>
-            <a href="#"><img src="user-icon.png" alt="Profile" height="30"></a>
-        </header>      -->
+
         <main>
             <div class="content">
                 <h2>Choose your preference</h2>

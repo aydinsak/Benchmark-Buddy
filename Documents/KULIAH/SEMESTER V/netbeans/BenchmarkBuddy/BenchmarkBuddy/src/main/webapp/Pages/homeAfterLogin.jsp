@@ -3,7 +3,6 @@
     Created on : 4 Dec 2024, 15.24.35
     Author     : Aydin Shidqi
 --%>
-
 <%@page import="java.util.List"%>
 <%@page import="model.Device"%>
 <%@page import="model.User"%>
@@ -13,7 +12,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Benchmark Buddy</title>
+        <title>Welcome - Benchmark Buddy</title>
         <style>
             /* General Reset */
             body, h1, h2, h3, p, ul, li, input {
@@ -119,16 +118,12 @@
     <body>
         <header>
             <h1>Benchmark Buddy</h1>
-            <!--            <nav>
-                            <a href="#">HOME</a>
-                            <img src="https://via.placeholder.com/20" alt="User Icon">
-                        </nav>-->
         </header>
         <%
             User user = (User) request.getSession().getAttribute("user");
             if (user == null) {
                 // Redirect to login page if the user is not logged in
-                response.sendRedirect("Pages/login.jsp");
+                response.sendRedirect("../UserServlet?action=invalid");
                 return;
             }
 

@@ -4,14 +4,30 @@
     Author     : Aydin Shidqi
 --%>
 
+<%@page import="model.User"%>
 <%@page import="model.Device"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    User user = (User) request.getSession().getAttribute("user");
+    if (user == null) {
+        // Redirect to login page if the user is not logged in
+        response.sendRedirect("../UserServlet?action=invalid");
+        return;
+    }
+%>
+<%
+    Device device = (Device) request.getSession().getAttribute("singleDevice");
+    String posterUrl = device.getPoster_url();
+    String finalUrl = posterUrl.contains("images_device")
+            ? ((HttpServletRequest) request).getContextPath() + "/" + posterUrl
+            : posterUrl;
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Benchmark Buddy</title>
+        <title> <%= device.getBrand()%> <%= device.getName()%> - Benchmark Buddy</title>
         <style>
             main {
                 max-width: 800px;
@@ -114,13 +130,7 @@
             }
         </style>
     </head>
-    <%
-        Device device = (Device) request.getSession().getAttribute("singleDevice");
-        String posterUrl = device.getPoster_url();
-        String finalUrl = posterUrl.contains("images_device")
-                ? ((HttpServletRequest) request).getContextPath() + "/" + posterUrl
-                : posterUrl;
-    %>
+
     <body>
         <%@include file="header.jsp"%>
         <button type="button" class="btn btn-back rounded-lg" onclick="window.location.href = '${pageContext.request.contextPath}/Pages/rekomendasiDevice.jsp'">
